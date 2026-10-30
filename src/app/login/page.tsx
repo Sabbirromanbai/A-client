@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useEffect, useState } from "react";
+import BrandLogo from "@/components/brand/BrandLogo";
 import { authClient } from "@/lib/auth-client";
 
 type Toast = {
@@ -102,17 +103,17 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-emerald-50 px-4 py-8 text-slate-900 sm:px-6 lg:py-12">
-      <div className="absolute -left-28 -top-28 h-96 w-96 rounded-full bg-emerald-200/60 blur-3xl" />
-      <div className="absolute -bottom-40 -right-24 h-[28rem] w-[28rem] rounded-full bg-lime-200/70 blur-3xl" />
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-emerald-50 px-4 py-8 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100 sm:px-6 lg:py-12">
+      <div className="absolute -left-28 -top-28 h-96 w-96 rounded-full bg-emerald-200/60 blur-3xl dark:bg-emerald-950/50" />
+      <div className="absolute -bottom-40 -right-24 h-[28rem] w-[28rem] rounded-full bg-lime-200/70 blur-3xl dark:bg-lime-950/30" />
 
       {toast && (
         <div
           aria-live="polite"
           className={`fixed right-4 top-4 z-20 flex max-w-sm items-start gap-3 rounded-2xl border px-4 py-3 text-sm shadow-xl sm:right-6 sm:top-6 ${
             toast.type === "success"
-              ? "border-emerald-200 bg-white text-emerald-800"
-              : "border-red-200 bg-white text-red-700"
+              ? "border-emerald-200 bg-white text-emerald-800 dark:border-emerald-800 dark:bg-slate-900 dark:text-emerald-300"
+              : "border-red-200 bg-white text-red-700 dark:border-red-900 dark:bg-slate-900 dark:text-red-300"
           }`}
           role={toast.type === "error" ? "alert" : "status"}
         >
@@ -127,14 +128,11 @@ export default function LoginPage() {
         </div>
       )}
 
-      <section className="relative grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-emerald-100 bg-white shadow-2xl shadow-emerald-950/10 lg:grid-cols-[0.9fr_1.1fr]">
+      <section className="relative grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-emerald-100 bg-white shadow-2xl shadow-emerald-950/10 transition-colors duration-300 dark:border-slate-800 dark:bg-slate-900 dark:shadow-black/30 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="hidden flex-col justify-between bg-emerald-700 p-10 text-white lg:flex xl:p-14">
           <div>
-            <Link className="inline-flex items-center gap-3" href="/">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-xl font-bold text-emerald-700">
-                G
-              </span>
-              <span className="text-lg font-semibold tracking-wide">GoodTogether</span>
+            <Link aria-label="GoodTogether home" className="inline-flex rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-white" href="/">
+              <BrandLogo inverse />
             </Link>
             <div className="mt-24 max-w-sm">
               <p className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-emerald-200">
@@ -153,18 +151,16 @@ export default function LoginPage() {
 
         <div className="p-7 sm:p-10 lg:p-12 xl:p-14">
           <div className="mb-8 text-center lg:text-left">
-            <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-600 text-2xl font-bold text-white shadow-lg shadow-emerald-600/25 lg:hidden">
-              G
-            </div>
+            <BrandLogo className="mb-5 lg:hidden" orientation="stacked" />
             <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-emerald-600">
               Welcome back
             </p>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900">Sign in to GoodTogether</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-500">Continue where you left off.</p>
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Sign in to GoodTogether</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">Continue where you left off.</p>
           </div>
 
           <button
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm font-semibold text-slate-700 transition hover:border-emerald-300 hover:bg-emerald-50 focus:outline-none focus:ring-4 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm font-semibold text-slate-700 transition hover:border-emerald-300 hover:bg-emerald-50 focus:outline-none focus:ring-4 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-emerald-700 dark:hover:bg-slate-800"
             disabled={isLoading}
             onClick={handleGoogleLogin}
             type="button"
@@ -179,19 +175,19 @@ export default function LoginPage() {
           </button>
 
           <div className="my-7 flex items-center gap-4">
-            <div className="h-px flex-1 bg-slate-200" />
+            <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
             <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">or</span>
-            <div className="h-px flex-1 bg-slate-200" />
+            <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
           </div>
 
           <form className="space-y-5" onSubmit={handleEmailLogin} noValidate>
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="email">
+              <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200" htmlFor="email">
                 Email address
               </label>
               <input
                 autoComplete="email"
-                className="w-full rounded-xl border border-slate-200 px-4 py-3.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
                 id="email"
                 name="email"
                 placeholder="you@example.com"
@@ -202,14 +198,14 @@ export default function LoginPage() {
 
             <div>
               <div className="mb-2">
-                <label className="block text-sm font-medium text-slate-700" htmlFor="password">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-200" htmlFor="password">
                   Password
                 </label>
               </div>
               <div className="relative">
                 <input
                   autoComplete="current-password"
-                  className="w-full rounded-xl border border-slate-200 px-4 py-3.5 pr-12 text-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 pr-12 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
                   id="password"
                   name="password"
                   placeholder="Enter your password"
@@ -218,7 +214,7 @@ export default function LoginPage() {
                 />
                 <button
                   aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-2 text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-2 text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:hover:bg-slate-800 dark:hover:text-emerald-300"
                   onClick={() => setShowPassword((visible) => !visible)}
                   type="button"
                 >
@@ -236,7 +232,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <label className="flex cursor-pointer items-center gap-3 text-sm text-slate-600">
+            <label className="flex cursor-pointer items-center gap-3 text-sm text-slate-600 dark:text-slate-300">
               <input
                 checked={rememberMe}
                 className="h-4 w-4 rounded border-slate-300 accent-emerald-600 focus:ring-emerald-500"
@@ -256,7 +252,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-slate-500">
+          <p className="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
             New to GoodTogether?{" "}
             <Link className="font-semibold text-emerald-700 hover:text-emerald-800" href="/register">
               Create an account

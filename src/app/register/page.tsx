@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
+import BrandLogo from "@/components/brand/BrandLogo";
 import { authClient } from "@/lib/auth-client";
 
 const passwordRequirements = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
@@ -107,32 +108,27 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-emerald-50 px-4 py-10 text-slate-900 sm:px-6">
-      <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-200/60 blur-3xl" />
-      <div className="absolute -bottom-32 -right-20 h-80 w-80 rounded-full bg-lime-200/70 blur-3xl" />
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-emerald-50 px-4 py-10 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100 sm:px-6">
+      <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-200/60 blur-3xl dark:bg-emerald-950/50" />
+      <div className="absolute -bottom-32 -right-20 h-80 w-80 rounded-full bg-lime-200/70 blur-3xl dark:bg-lime-950/30" />
 
-      <section className="relative w-full max-w-md rounded-3xl border border-emerald-100 bg-white p-7 shadow-xl shadow-emerald-900/10 sm:p-10">
-        <div className="mb-8 text-center">
-          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-600 text-2xl font-bold text-white shadow-lg shadow-emerald-600/25">
-            G
-          </div>
-          <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-emerald-600">
-            GoodTogether
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Create your account</h1>
-          <p className="mt-2 text-sm leading-6 text-slate-500">
+      <section className="relative w-full max-w-md rounded-3xl border border-emerald-100 bg-white p-7 shadow-xl shadow-emerald-900/10 transition-colors duration-300 dark:border-slate-800 dark:bg-slate-900 dark:shadow-black/30 sm:p-10">
+        <div className="mb-8 flex w-full flex-col items-center text-center">
+          <BrandLogo className="mb-5" orientation="stacked" />
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Create your account</h1>
+          <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
             Join a community that makes every day a little better.
           </p>
         </div>
 
         <form className="space-y-5" onSubmit={handleSubmit} noValidate>
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="name">
+            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200" htmlFor="name">
               Full name
             </label>
             <input
               autoComplete="name"
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
               id="name"
               name="name"
               placeholder="Alex Morgan"
@@ -142,12 +138,12 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="email">
+            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200" htmlFor="email">
               Email address
             </label>
             <input
               autoComplete="email"
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
               id="email"
               name="email"
               placeholder="you@example.com"
@@ -157,27 +153,27 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="password">
+            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200" htmlFor="password">
               Password
             </label>
             <input
               autoComplete="new-password"
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
               id="password"
               name="password"
               placeholder="At least 6 characters"
               required
               type="password"
             />
-            <p className="mt-2 text-xs text-slate-400">Use at least 6 characters, with uppercase and lowercase letters.</p>
+            <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">Use at least 6 characters, with uppercase and lowercase letters.</p>
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="image">
+            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200" htmlFor="image">
               Profile photo URL <span className="font-normal text-slate-400">(optional)</span>
             </label>
             <input
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500"
               id="image"
               name="image"
               placeholder="https://example.com/photo.jpg"
@@ -186,12 +182,12 @@ export default function RegisterPage() {
           </div>
 
           {errorMessage && (
-            <p aria-live="polite" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+            <p aria-live="polite" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
               {errorMessage}
             </p>
           )}
           {successMessage && (
-            <p aria-live="polite" className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700" role="status">
+            <p aria-live="polite" className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300" role="status">
               {successMessage}
             </p>
           )}
@@ -206,13 +202,13 @@ export default function RegisterPage() {
         </form>
 
         <div className="my-6 flex items-center gap-4">
-          <div className="h-px flex-1 bg-slate-200" />
+          <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
           <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">or</span>
-          <div className="h-px flex-1 bg-slate-200" />
+          <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
         </div>
 
         <button
-          className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm font-semibold text-slate-700 transition hover:border-emerald-300 hover:bg-emerald-50 focus:outline-none focus:ring-4 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm font-semibold text-slate-700 transition hover:border-emerald-300 hover:bg-emerald-50 focus:outline-none focus:ring-4 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-emerald-700 dark:hover:bg-slate-800"
           disabled={isLoading || isGoogleLoading}
           onClick={handleGoogleSignUp}
           type="button"
@@ -226,7 +222,7 @@ export default function RegisterPage() {
           {isGoogleLoading ? "Connecting to Google..." : "Continue with Google"}
         </button>
 
-        <p className="mt-7 text-center text-sm text-slate-500">
+        <p className="mt-7 text-center text-sm text-slate-500 dark:text-slate-400">
           Want to learn more?{" "}
           <Link className="font-semibold text-emerald-700 hover:text-emerald-800" href="/">
             Return home
