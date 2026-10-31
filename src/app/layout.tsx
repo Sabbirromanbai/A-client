@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import ThemeProvider from "@/components/providers/ThemeProvider";
 import "./globals.css";
@@ -41,10 +42,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 })();`}
         </Script>
       </head>
-      <body className="flex min-h-full flex-col bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+      <body className="flex min-h-screen flex-col bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
         <ThemeProvider>
           <Navbar />
-          {children}
+          <div className="flex-1">{children}</div>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
