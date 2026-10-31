@@ -26,9 +26,17 @@ type Event = {
 };
 
 async function getUpcomingEvents(now: number): Promise<Event[]> {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-  console.log("API URL:", apiUrl);
-  const response = await fetch(`${apiUrl}/api/events?limit=6`, {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, "");
+
+  if (!apiUrl) {
+    throw new Error("NEXT_PUBLIC_API_URL is not configured.");
+  }
+
+  const endpoint = `${apiUrl}/api/events?limit=6`;
+
+  console.log("Final Events API URL:", endpoint);
+
+  const response = await fetch(endpoint, {
     next: { revalidate: 60 },
   });
   if (!response.ok) {
