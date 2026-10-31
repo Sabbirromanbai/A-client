@@ -27,7 +27,7 @@ const getInvolvedLinks = [
 
 export default function Footer() {
   return (
-    <footer className="relative isolate overflow-hidden border-t border-emerald-100/80 bg-[#f7faf7] text-slate-600 dark:border-slate-800 dark:bg-[#080f0d] dark:text-slate-400">
+    <footer className="relative isolate w-full min-w-0 overflow-hidden border-t border-emerald-100/80 bg-[#f7faf7] text-slate-600 dark:border-slate-800 dark:bg-[#080f0d] dark:text-slate-400">
 
       {/* Decorative Background */}
       <div
@@ -41,13 +41,13 @@ export default function Footer() {
       {/* Top Accent */}
       <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-70" />
 
-      <div className="mx-auto max-w-7xl px-5 pb-10 pt-14 sm:px-8 sm:pt-16 lg:px-10 lg:pt-20">
+      <div className="mx-auto w-full min-w-0 max-w-7xl px-5 pb-10 pt-14 sm:px-8 sm:pt-16 lg:px-10 lg:pt-20">
 
         {/* Main Footer */}
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.5fr_0.8fr_1fr] lg:gap-20">
+        <div className="grid min-w-0 grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-[1.5fr_0.8fr_1fr] lg:gap-20">
 
           {/* Brand Column */}
-          <div className="max-w-md">
+          <div className="min-w-0 max-w-md">
             <Link
               aria-label="GoodTogether home"
               className="inline-flex rounded-xl outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-4 dark:focus-visible:ring-offset-slate-950"
@@ -63,7 +63,7 @@ export default function Footer() {
             </p>
 
             {/* Brand Message */}
-            <div className="mt-7 inline-flex items-center gap-3 rounded-2xl border border-emerald-100 bg-white/70 px-4 py-3 shadow-sm shadow-emerald-950/[0.03] backdrop-blur-sm dark:border-emerald-900/50 dark:bg-emerald-950/20">
+            <div className="mt-7 inline-flex max-w-full flex-wrap items-center gap-3 rounded-2xl border border-emerald-100 bg-white/70 px-4 py-3 shadow-sm shadow-emerald-950/[0.03] backdrop-blur-sm dark:border-emerald-900/50 dark:bg-emerald-950/20">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
                 <Leaf className="h-5 w-5" />
               </span>
@@ -80,7 +80,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <nav aria-label="Quick links">
+          <nav aria-label="Quick links" className="min-w-0">
             <div className="flex items-center gap-2.5">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400">
                 <Sparkles className="h-[18px] w-[18px]" />
@@ -114,7 +114,7 @@ export default function Footer() {
           </nav>
 
           {/* Get Involved */}
-          <nav aria-label="Get involved">
+          <nav aria-label="Get involved" className="min-w-0">
             <div className="flex items-center gap-2.5">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400">
                 <HeartHandshake className="h-[18px] w-[18px]" />
