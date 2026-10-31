@@ -1,6 +1,6 @@
 import { authClient } from "@/lib/auth-client";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:5000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 export type ApiRequestOptions<TBody = unknown> = Omit<
   RequestInit,
@@ -20,17 +20,18 @@ export class ApiClientError extends Error {
 }
 
 async function getJwt(): Promise<string> {
+  let result: Awaited<ReturnType<typeof authClient.token>>;
   try {
-    const { data, error } = await authClient.token();
-
-    if (error || !data?.token) {
-      throw new ApiClientError("Unable to authenticate this request.");
-    }
-
-    return data.token;
+    result = await authClient.token();
   } catch {
-    throw new ApiClientError("Unable to authenticate this request.");
+    throw new ApiClientError("Unable to authenticate this request.", 401);
   }
+
+  if (result.error || !result.data?.token) {
+    throw new ApiClientError("Unable to authenticate this request.", 401);
+  }
+
+  return result.data.token;
 }
 
 async function request<TResponse, TBody = unknown>(

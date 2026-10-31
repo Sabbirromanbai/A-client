@@ -4,6 +4,7 @@ import Script from "next/script";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import ThemeProvider from "@/components/providers/ThemeProvider";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Navbar />
           <div className="flex-1">{children}</div>
           <Footer />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

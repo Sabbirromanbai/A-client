@@ -3,7 +3,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useRef, useState } from "react";
+import { toast } from "sonner";
 import BrandLogo from "@/components/brand/BrandLogo";
 import { authClient } from "@/lib/auth-client";
 
@@ -11,16 +12,18 @@ const passwordRequirements = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
 
 export default function RegisterPage() {
   const router = useRouter();
+  const requestInProgress = useRef(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+
+  function notifyRegistrationError(message: string) {
+    toast.error(message, { id: "register-feedback" });
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setErrorMessage("");
-    setSuccessMessage("");
+    if (requestInProgress.current) return;
 
     const formData = new FormData(event.currentTarget);
     const name = String(formData.get("name") ?? "").trim();
@@ -29,17 +32,17 @@ export default function RegisterPage() {
     const image = String(formData.get("image") ?? "").trim();
 
     if (!name) {
-      setErrorMessage("Please enter your name.");
+      notifyRegistrationError("Please enter your name.");
       return;
     }
 
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-      setErrorMessage("Please enter a valid email address.");
+      notifyRegistrationError("Please enter a valid email address.");
       return;
     }
 
     if (!passwordRequirements.test(password)) {
-      setErrorMessage(
+      notifyRegistrationError(
         "Password must be at least 6 characters and include one uppercase and one lowercase letter."
       );
       return;
@@ -52,11 +55,12 @@ export default function RegisterPage() {
           throw new Error("Invalid image URL");
         }
       } catch {
-        setErrorMessage("Please enter a valid profile photo URL.");
+        notifyRegistrationError("Please enter a valid profile photo URL.");
         return;
       }
     }
 
+    requestInProgress.current = true;
     setIsLoading(true);
 
     try {
@@ -68,28 +72,30 @@ export default function RegisterPage() {
       });
 
       if (error) {
-        setErrorMessage(
+        notifyRegistrationError(
           error.message || "We couldn't create your account. Please try again."
         );
         return;
       }
 
-      setSuccessMessage("Your account is ready! Welcome to GoodTogether...");
-      window.setTimeout(() => router.replace("/"), 1200);
+      toast.success("Your account is ready! Welcome to GoodTogether.", {
+        id: "register-feedback",
+      });
+      router.replace("/");
     } catch {
-      setErrorMessage(
+      notifyRegistrationError(
         "Something went wrong. Please check your details and try again."
       );
     } finally {
+      requestInProgress.current = false;
       setIsLoading(false);
     }
   }
 
   async function handleGoogleSignUp() {
-    if (isLoading || isGoogleLoading) return;
+    if (requestInProgress.current) return;
 
-    setErrorMessage("");
-    setSuccessMessage("");
+    requestInProgress.current = true;
     setIsGoogleLoading(true);
 
     try {
@@ -99,11 +105,12 @@ export default function RegisterPage() {
       });
 
       if (error) {
-        setErrorMessage(error.message || "Google sign-up is unavailable.");
+        notifyRegistrationError(error.message || "Google sign-up is unavailable.");
       }
     } catch {
-      setErrorMessage("Google sign-up is unavailable.");
+      notifyRegistrationError("Google sign-up is unavailable.");
     } finally {
+      requestInProgress.current = false;
       setIsGoogleLoading(false);
     }
   }
@@ -280,18 +287,6 @@ export default function RegisterPage() {
                 className="w-full rounded-2xl border border-slate-200 bg-white/70 px-4 py-3.5 text-sm text-slate-900 outline-none backdrop-blur-xl transition-all duration-300 placeholder:text-slate-400 hover:border-emerald-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 dark:border-slate-700 dark:bg-slate-950/50 dark:text-white dark:placeholder:text-slate-500 dark:focus:bg-slate-950"
               />
             </div>
-
-            {errorMessage && (
-              <div aria-live="polite" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300" role="alert">
-                {errorMessage}
-              </div>
-            )}
-
-            {successMessage && (
-              <div aria-live="polite" className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300" role="status">
-                {successMessage}
-              </div>
-            )}
 
             <button
               className="group relative w-full overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 px-4 py-4 text-sm font-bold text-white shadow-xl shadow-emerald-700/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-emerald-700/30 focus:outline-none focus:ring-4 focus:ring-emerald-300/40 disabled:cursor-not-allowed disabled:opacity-60"

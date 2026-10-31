@@ -3,93 +3,130 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import BrandLogo from "@/components/brand/BrandLogo";
 import { authClient } from "@/lib/auth-client";
 
-type Toast = {
-  message: string;
-  type: "error" | "success";
-};
-
 export default function LoginPage() {
   const router = useRouter();
+  const { data: session, isPending: isSessionPending } = authClient.useSession();
+  const requestInProgress = useRef(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMethod, setLoadingMethod] = useState<"email" | "google" | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
-  const [toast, setToast] = useState<Toast | null>(null);
 
   useEffect(() => {
-    if (!toast) return;
-    const timeout = window.setTimeout(() => setToast(null), 5000);
-    return () => window.clearTimeout(timeout);
-  }, [toast]);
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("oauth") !== "success" || isSessionPending || !session) {
+      return;
+    }
 
-  function showToast(message: string, type: Toast["type"]) {
-    setToast({ message, type });
+    const userName =
+      session.user.name?.trim() ||
+      session.user.email.split("@")[0] ||
+      "there";
+    toast.success(`Welcome back, ${userName}! 👋`, {
+      id: "login-feedback",
+    });
+    router.replace(getReturnPath());
+  }, [isSessionPending, router, session]);
+
+  function notifyLoginError(message: string) {
+    toast.error(message, { id: "login-feedback" });
+  }
+
+  function getReturnPath() {
+    const callbackURL = new URLSearchParams(window.location.search).get(
+      "callbackURL",
+    );
+    if (!callbackURL?.startsWith("/") || callbackURL.startsWith("//")) {
+      return "/";
+    }
+
+    try {
+      const target = new URL(callbackURL, window.location.origin);
+      return target.origin === window.location.origin
+        ? `${target.pathname}${target.search}${target.hash}`
+        : "/";
+    } catch {
+      return "/";
+    }
   }
 
   async function handleEmailLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setToast(null);
+    if (requestInProgress.current) return;
 
     const formData = new FormData(event.currentTarget);
     const email = String(formData.get("email") ?? "").trim();
     const password = String(formData.get("password") ?? "");
 
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-      showToast("Please enter a valid email address.", "error");
+      notifyLoginError("Please enter a valid email address.");
       return;
     }
 
     if (!password) {
-      showToast("Please enter your password.", "error");
+      notifyLoginError("Please enter your password.");
       return;
     }
 
+    requestInProgress.current = true;
     setIsLoading(true);
     setLoadingMethod("email");
 
     try {
-      const { error } = await authClient.signIn.email({
+      const { data, error } = await authClient.signIn.email({
         email,
         password,
         rememberMe,
       });
 
       if (error) {
-        showToast(error.message || "Invalid email or password. Please try again.", "error");
+        notifyLoginError(error.message || "Invalid email or password. Please try again.");
         return;
       }
 
-      showToast("Welcome back! Taking you to GoodTogether...", "success");
-      window.setTimeout(() => router.replace("/"), 900);
+      const userName =
+        data?.user?.name?.trim() || email.split("@")[0] || "there";
+      toast.success(`Welcome back, ${userName}! 👋`, {
+        id: "login-feedback",
+      });
+      const returnPath = getReturnPath();
+      router.replace(returnPath);
     } catch {
-      showToast("Invalid email or password. Please try again.", "error");
+      notifyLoginError("Invalid email or password. Please try again.");
     } finally {
+      requestInProgress.current = false;
       setIsLoading(false);
       setLoadingMethod(null);
     }
   }
 
   async function handleGoogleLogin() {
-    setToast(null);
+    if (requestInProgress.current) return;
+
+    requestInProgress.current = true;
     setIsLoading(true);
     setLoadingMethod("google");
 
     try {
       const { error } = await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/",
+        callbackURL: `/login?oauth=success&callbackURL=${encodeURIComponent(
+          getReturnPath(),
+        )}`,
       });
 
       if (error) {
-        showToast(error.message || "Google sign-in is unavailable.", "error");
+        notifyLoginError(error.message || "Google sign-in is unavailable.");
       }
     } catch {
-      showToast("Google sign-in is unavailable.", "error");
+      notifyLoginError("Google sign-in is unavailable.");
     } finally {
+      requestInProgress.current = false;
       setIsLoading(false);
       setLoadingMethod(null);
     }
@@ -101,24 +138,6 @@ export default function LoginPage() {
       {/* Ambient background */}
       <div className="pointer-events-none absolute -left-32 -top-32 h-[30rem] w-[30rem] rounded-full bg-emerald-300/30 blur-[110px] dark:bg-emerald-700/15" />
       <div className="pointer-events-none absolute -bottom-40 -right-32 h-[32rem] w-[32rem] rounded-full bg-lime-300/30 blur-[120px] dark:bg-lime-700/10" />
-
-      {/* Toast */}
-      {toast && (
-        <div
-          aria-live="polite"
-          className={`fixed right-4 top-4 z-30 flex max-w-sm items-start gap-3 rounded-2xl border px-4 py-3 text-sm shadow-2xl backdrop-blur-xl sm:right-6 sm:top-6 ${
-            toast.type === "success"
-              ? "border-emerald-200 bg-white/90 text-emerald-800 dark:border-emerald-800 dark:bg-slate-900/90 dark:text-emerald-300"
-              : "border-red-200 bg-white/90 text-red-700 dark:border-red-900 dark:bg-slate-900/90 dark:text-red-300"
-          }`}
-          role={toast.type === "error" ? "alert" : "status"}
-        >
-          <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white ${toast.type === "success" ? "bg-emerald-500" : "bg-red-500"}`}>
-            {toast.type === "success" ? "✓" : "!"}
-          </span>
-          {toast.message}
-        </div>
-      )}
 
       {/* Main Card */}
       <section className="relative grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/80 bg-white/80 shadow-[0_30px_100px_-30px_rgba(4,120,87,0.25)] backdrop-blur-2xl transition-colors duration-500 dark:border-white/10 dark:bg-slate-900/80 dark:shadow-black/40 lg:grid-cols-[0.9fr_1.1fr]">

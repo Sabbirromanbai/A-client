@@ -14,8 +14,22 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import BrandLogo from "@/components/brand/BrandLogo";
 import { useTheme } from "@/components/providers/ThemeProvider";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
 
 const profileLinks = [
@@ -56,15 +70,13 @@ function MoonStarMark({ className = "h-4 w-4" }: { className?: string }) {
 export default function Navbar() {
   const { isDark, isReady, toggleTheme } = useTheme();
   const { data: session, isPending, refetch } = authClient.useSession();
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [imageErrorUrl, setImageErrorUrl] = useState<string | null>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+  const logoutRequestInProgress = useRef(false);
   const user = session?.user;
   const userInitial = (user?.name?.trim().charAt(0) || user?.email?.charAt(0) || "G").toUpperCase();
-  const profileImageUrl = user?.image && user.image !== imageErrorUrl ? user.image : null;
 
   useEffect(() => {
     function updateScrollState() {
@@ -73,14 +85,12 @@ export default function Navbar() {
 
     function handlePointerDown(event: PointerEvent) {
       if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
-        setIsProfileMenuOpen(false);
         setIsMobileMenuOpen(false);
       }
     }
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        setIsProfileMenuOpen(false);
         setIsMobileMenuOpen(false);
       }
     }
@@ -98,25 +108,38 @@ export default function Navbar() {
   }, []);
 
   async function handleLogout() {
-    if (isLoggingOut) return;
+    if (logoutRequestInProgress.current) return;
 
+    logoutRequestInProgress.current = true;
     setIsLoggingOut(true);
     try {
       const { error } = await authClient.signOut();
-      if (!error) {
-        await refetch();
-        setIsProfileMenuOpen(false);
-        setIsMobileMenuOpen(false);
+      if (error) {
+        toast.error(error.message || "We couldn’t log you out. Please try again.", {
+          id: "logout-feedback",
+        });
+        return;
       }
-    } catch {
-      // Keep the current session visible when logout cannot be completed.
+
+      toast.success("You’ve been logged out.", { id: "logout-feedback" });
+      setIsMobileMenuOpen(false);
+      try {
+        await refetch();
+      } catch (error) {
+        console.error("Could not refresh the session after logout.", error);
+      }
+    } catch (error) {
+      console.error("Could not log out.", error);
+      toast.error("We couldn’t log you out. Please try again.", {
+        id: "logout-feedback",
+      });
     } finally {
+      logoutRequestInProgress.current = false;
       setIsLoggingOut(false);
     }
   }
 
   function closeMenus() {
-    setIsProfileMenuOpen(false);
     setIsMobileMenuOpen(false);
   }
 
@@ -132,20 +155,6 @@ export default function Navbar() {
         {label}
       </Link>
     ));
-  }
-
-  function renderLogoutButton() {
-    return (
-      <button
-        className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-rose-600 transition-colors duration-200 hover:bg-rose-50 disabled:cursor-wait disabled:opacity-60 dark:text-rose-400 dark:hover:bg-rose-950/40"
-        disabled={isLoggingOut}
-        onClick={handleLogout}
-        type="button"
-      >
-        <LogOut aria-hidden="true" className="h-4 w-4" />
-        {isLoggingOut ? "Logging out..." : "Logout"}
-      </button>
-    );
   }
 
   return (
@@ -203,49 +212,59 @@ export default function Navbar() {
             {isPending ? (
               <span aria-label="Checking account" className="h-10 w-10 animate-pulse rounded-full bg-slate-200/70 dark:bg-slate-800/80 sm:w-24" />
             ) : user ? (
-              <div className="relative">
+              <>
+                <DropdownMenu>
+                  <DropdownMenuTrigger
+                    aria-label={`Account menu for ${user.name || user.email}`}
+                    className="group inline-flex h-10 shrink-0 items-center justify-center gap-1 rounded-full border border-white/80 bg-white/65 py-1 pl-1 pr-2 shadow-sm transition-all duration-200 hover:border-emerald-200 hover:bg-white/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:border-slate-700/80 dark:bg-slate-900/65 dark:hover:border-emerald-800 dark:hover:bg-slate-900"
+                  >
+                    <Avatar className="h-8 w-8 ring-1 ring-emerald-600/10">
+                      <AvatarImage alt="" src={user.image || undefined} />
+                      <AvatarFallback className="bg-gradient-to-br from-emerald-100 to-teal-200 text-sm font-bold text-emerald-800 dark:from-emerald-900 dark:to-teal-900 dark:text-emerald-100">
+                        {userInitial}
+                      </AvatarFallback>
+                    </Avatar>
+                    <ChevronDown
+                      aria-hidden="true"
+                      className="h-3.5 w-3.5 text-slate-400 transition-transform duration-200 ease-out group-hover:translate-y-0.5 group-hover:text-emerald-700 group-data-[popup-open]:rotate-180 dark:group-hover:text-emerald-300"
+                    />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    className="w-64 overflow-hidden rounded-2xl border border-white/75 bg-white/90 p-1.5 text-slate-700 shadow-[0_20px_60px_-24px_rgba(15,76,51,0.38)] backdrop-blur-2xl dark:border-slate-700/80 dark:bg-slate-900/92 dark:text-slate-200 dark:shadow-black/50"
+                    sideOffset={12}
+                  >
+                    <DropdownMenuGroup>
+                      <DropdownMenuLabel className="mb-1 border-b border-emerald-100/80 px-3 py-3 dark:border-slate-800">
+                        <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{user.name || "GoodTogether member"}</p>
+                        <p className="mt-0.5 truncate text-xs font-normal text-slate-500 dark:text-slate-400">{user.email}</p>
+                      </DropdownMenuLabel>
+                      {profileLinks.map(({ href, label, icon: Icon }) => (
+                        <DropdownMenuItem
+                          className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 focus:bg-emerald-50 focus:text-emerald-800 dark:text-slate-300 dark:focus:bg-emerald-950/60 dark:focus:text-emerald-200"
+                          key={href}
+                          render={<Link href={href} />}
+                        >
+                          <Icon aria-hidden="true" className="h-4 w-4 text-emerald-700 transition-transform duration-200 group-hover:scale-110 dark:text-emerald-300" />
+                          {label}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <button
-                  aria-expanded={isProfileMenuOpen}
-                  aria-haspopup="true"
-                  aria-label={`Account menu for ${user.name || user.email}`}
-                  className="group inline-flex h-10 max-w-48 items-center gap-2 rounded-full border border-white/80 bg-white/65 py-1 pl-1 pr-2 text-sm font-semibold text-slate-700 shadow-sm transition-all duration-200 hover:border-emerald-200 hover:bg-white/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:border-slate-700/80 dark:bg-slate-900/65 dark:text-slate-200 dark:hover:border-emerald-800 dark:hover:bg-slate-900"
-                  onClick={() => setIsProfileMenuOpen((open) => !open)}
+                  aria-label={isLoggingOut ? "Logging out" : "Logout"}
+                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-rose-200/70 bg-white/65 text-rose-600 shadow-sm transition-all duration-200 hover:border-rose-300 hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 disabled:cursor-wait disabled:opacity-60 dark:border-rose-900/70 dark:bg-slate-900/65 dark:text-rose-400 dark:hover:border-rose-800 dark:hover:bg-rose-950/40 sm:w-auto sm:gap-2 sm:px-3"
+                  disabled={isLoggingOut}
+                  onClick={() => void handleLogout()}
                   type="button"
                 >
-                  <span
-                    aria-hidden="true"
-                    className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-100 to-teal-200 text-sm font-bold text-emerald-800 ring-1 ring-emerald-600/10 dark:from-emerald-900 dark:to-teal-900 dark:text-emerald-100"
-                  >
-                    {profileImageUrl ? (
-                      // Google avatar hosts are dynamic, so this image intentionally uses the browser loader.
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        alt=""
-                        className="h-full w-full object-cover"
-                        onError={() => setImageErrorUrl(profileImageUrl)}
-                        src={profileImageUrl}
-                      />
-                    ) : (
-                      userInitial
-                    )}
+                  <LogOut aria-hidden="true" className="h-4 w-4" />
+                  <span className="hidden text-sm font-medium sm:inline">
+                    {isLoggingOut ? "Logging out..." : "Logout"}
                   </span>
-                  <span className="hidden max-w-28 truncate sm:inline">{user.name || user.email}</span>
-                  <ChevronDown aria-hidden="true" className={`hidden h-4 w-4 text-slate-400 transition-transform duration-200 sm:block ${isProfileMenuOpen ? "rotate-180" : ""}`} />
                 </button>
-
-                {isProfileMenuOpen && (
-                  <div className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-64 overflow-hidden rounded-2xl border border-white/75 bg-white/90 p-1.5 shadow-[0_20px_60px_-24px_rgba(15,76,51,0.38)] backdrop-blur-2xl dark:border-slate-700/80 dark:bg-slate-900/92 dark:shadow-black/50">
-                    <div className="mb-1 border-b border-emerald-100/80 px-3 py-3 dark:border-slate-800">
-                      <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{user.name || "GoodTogether member"}</p>
-                      <p className="mt-0.5 truncate text-xs text-slate-500 dark:text-slate-400">{user.email}</p>
-                    </div>
-                    {renderProfileLinks()}
-                    <div className="mt-1 border-t border-emerald-100/80 pt-1 dark:border-slate-800">
-                      {renderLogoutButton()}
-                    </div>
-                  </div>
-                )}
-              </div>
+              </>
             ) : (
               <Link
                 aria-label="Join Community"
@@ -263,10 +282,7 @@ export default function Navbar() {
               aria-expanded={isMobileMenuOpen}
               aria-label={isMobileMenuOpen ? "Close mobile navigation" : "Open mobile navigation"}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-transparent text-slate-600 transition-all duration-200 hover:border-emerald-200/80 hover:bg-white/75 hover:text-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:bg-slate-900/75 dark:hover:text-emerald-200 md:hidden"
-              onClick={() => {
-                setIsMobileMenuOpen((open) => !open);
-                setIsProfileMenuOpen(false);
-              }}
+              onClick={() => setIsMobileMenuOpen((open) => !open)}
               type="button"
             >
               {isMobileMenuOpen ? <X aria-hidden="true" className="h-5 w-5" /> : <Menu aria-hidden="true" className="h-5 w-5" />}
@@ -305,29 +321,18 @@ export default function Navbar() {
               <>
                 <div className="mx-3 my-2 border-t border-emerald-100/80 dark:border-slate-800" />
                 <div className="flex items-center gap-3 px-3 py-2">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-100 to-teal-200 text-sm font-bold text-emerald-800 dark:from-emerald-900 dark:to-teal-900 dark:text-emerald-100">
-                    {profileImageUrl ? (
-                      // Google avatar hosts are dynamic, so this image intentionally uses the browser loader.
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        alt=""
-                        className="h-full w-full object-cover"
-                        onError={() => setImageErrorUrl(profileImageUrl)}
-                        src={profileImageUrl}
-                      />
-                    ) : (
-                      userInitial
-                    )}
-                  </span>
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage alt="" src={user.image || undefined} />
+                      <AvatarFallback className="bg-gradient-to-br from-emerald-100 to-teal-200 text-sm font-bold text-emerald-800 dark:from-emerald-900 dark:to-teal-900 dark:text-emerald-100">
+                        {userInitial}
+                      </AvatarFallback>
+                    </Avatar>
                   <span className="min-w-0">
                     <span className="block truncate text-sm font-semibold text-slate-900 dark:text-white">{user.name || "GoodTogether member"}</span>
                     <span className="block truncate text-xs text-slate-500 dark:text-slate-400">{user.email}</span>
                   </span>
                 </div>
                 {renderProfileLinks()}
-                <div className="mt-1 border-t border-emerald-100/80 pt-1 dark:border-slate-800">
-                  {renderLogoutButton()}
-                </div>
               </>
             )}
           </nav>
