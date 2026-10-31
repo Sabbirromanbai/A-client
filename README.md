@@ -1,41 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GoodTogether — Together We Make Change 🌱
 
-## Getting Started
+**GoodTogether** is a community-driven social development platform where people can create, discover, join, and manage social service events. It helps communities work together to make a positive impact.
 
-First, run the development server:
+🔗 **Live Website:** [Add Your Deployed Frontend URL]
+
+## ✨ Key Features
+
+- **Authentication System:** Secure email/password authentication with Google sign-in using Better Auth.
+- **Upcoming Events:** Discover upcoming social service events with search and category filtering.
+- **Create Events:** Authenticated users can create events with descriptions, images, locations, categories, and future dates.
+- **Join Events:** Users can join or leave events and participate in community activities.
+- **Joined Events:** View and manage all joined events in one place.
+- **Manage Events:** Event creators can update or delete their own events.
+- **Protected Routes:** Private pages and APIs are protected with authentication and JWT verification.
+- **Responsive Design:** User-friendly interface for mobile, tablet, and desktop devices.
+- **Dark & Light Theme:** Switch between light and dark modes.
+
+## 🛠️ Technologies Used
+
+**Frontend**
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- Lucide React
+- Better Auth
+
+**Backend**
+- Node.js
+- Express.js
+- MongoDB Native Driver
+- JWT Authentication (JOSE)
+
+## 🚀 Run Locally
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Sabbirromanbai/A-client.git
+cd A-client
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+
+Create a `.env.local` file and add the required environment variables:
+
+```env
+NEXT_PUBLIC_API_URL=YOUR_BACKEND_API_URL
+BETTER_AUTH_SECRET=YOUR_SECRET
+BETTER_AUTH_URL=YOUR_FRONTEND_URL
+MONGODB_URI=YOUR_MONGODB_CONNECTION_STRING
+```
+
+Use your own valid credentials and deployment URLs.
+
+### 4. Start the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🎯 Project Goal
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+GoodTogether aims to make social development activities easier to organize by connecting people who want to contribute to their communities.
 
-## Learn More
+**Together We Make Change. 💚**
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-
-
-
-
+Developed as part of **Programming Hero — Batch 14, Assignment 08**.
