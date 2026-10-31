@@ -27,6 +27,7 @@ type Event = {
 
 async function getUpcomingEvents(now: number): Promise<Event[]> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+  console.log("API URL:", apiUrl);
   const response = await fetch(`${apiUrl}/api/events?limit=6`, {
     next: { revalidate: 60 },
   });
