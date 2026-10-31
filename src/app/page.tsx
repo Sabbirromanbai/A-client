@@ -67,7 +67,11 @@ async function getUpcomingEvents(now: number): Promise<Event[]> {
   );
 
   return events
-    .filter((event) => Date.parse(event.eventDate) > now)
+    .filter(
+      (event) =>
+        Date.parse(event.eventDate) > now &&
+        event.title.trim().toLowerCase() !== "tree plantation",
+    )
     .sort((a, b) => Date.parse(a.eventDate) - Date.parse(b.eventDate))
     .slice(0, 6);
 }
