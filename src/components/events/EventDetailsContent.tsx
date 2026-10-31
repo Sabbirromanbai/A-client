@@ -9,7 +9,6 @@ import {
   LoaderCircle,
   LogOut,
   MapPin,
-  ShieldCheck,
   Tag,
   UsersRound,
 } from "lucide-react";
@@ -516,16 +515,11 @@ export default function EventDetailsContent({
                   <p className="truncate font-bold text-slate-900 dark:text-white">
                     {organizerName}
                   </p>
-                  <p className="mt-1 break-all text-sm text-slate-600 dark:text-slate-400">
-                    {event.creatorEmail || "Organizer contact unavailable"}
-                  </p>
                 </div>
               </div>
               <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/60 dark:text-emerald-300">
-                <ShieldCheck aria-hidden="true" className="h-4 w-4" />
-                {event.organizer?.emailVerified
-                  ? "Verified member"
-                  : "Community organizer"}
+                <UsersRound aria-hidden="true" className="h-4 w-4" />
+                Community organizer
               </div>
             </CardContent>
           </Card>

@@ -24,7 +24,7 @@ async function getRecentEvents(): Promise<Event[]> {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
-    const response = await fetch(`${apiUrl}/api/events`, {
+    const response = await fetch(`${apiUrl}/api/events?limit=6`, {
       next: { revalidate: 60 },
     });
 

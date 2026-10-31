@@ -15,6 +15,7 @@ import { type MouseEvent, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import type { CommunityEvent } from "@/app/lib/events";
 import EventThumbnail from "@/components/events/EventThumbnail";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -78,7 +79,6 @@ function matchesCategory(event: CommunityEvent, category: Category) {
 function EventCard({ event }: { event: CommunityEvent }) {
   const organizerName =
     event.organizer?.name?.trim() ||
-    event.creatorEmail ||
     "Community organizer";
 
   return (
@@ -116,10 +116,17 @@ function EventCard({ event }: { event: CommunityEvent }) {
           <span className="line-clamp-1">{event.location}</span>
         </p>
         <p className="flex items-center gap-2">
-          <UserRound
-            aria-hidden="true"
-            className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400"
-          />
+          <Avatar className="size-6 shrink-0">
+            {event.organizer?.image && (
+              <AvatarImage alt="" src={event.organizer.image} />
+            )}
+            <AvatarFallback>
+              <UserRound
+                aria-hidden="true"
+                className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400"
+              />
+            </AvatarFallback>
+          </Avatar>
           <span className="line-clamp-1">{organizerName}</span>
         </p>
       </CardContent>

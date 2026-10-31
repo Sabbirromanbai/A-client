@@ -8,9 +8,8 @@ export type CommunityEvent = {
   eventDate: string;
   creatorEmail?: string;
   organizer?: {
-    name: string | null;
-    image: string | null;
-    emailVerified: boolean;
+    name?: string | null;
+    image?: string | null;
   } | null;
 };
 
@@ -64,17 +63,18 @@ function parseEvent(value: unknown): CommunityEvent | null {
     eventDate,
     creatorEmail:
       typeof creatorEmail === "string" ? creatorEmail : undefined,
-    organizer:
-      isRecord(organizer) &&
-      (typeof organizer.name === "string" || organizer.name === null) &&
-      (typeof organizer.image === "string" || organizer.image === null) &&
-      typeof organizer.emailVerified === "boolean"
-        ? {
-            name: organizer.name,
-            image: organizer.image,
-            emailVerified: organizer.emailVerified,
-          }
-        : null,
+    organizer: isRecord(organizer)
+      ? {
+          name:
+            typeof organizer.name === "string" || organizer.name === null
+              ? organizer.name
+              : undefined,
+          image:
+            typeof organizer.image === "string" || organizer.image === null
+              ? organizer.image
+              : undefined,
+        }
+      : null,
   };
 }
 
