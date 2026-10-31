@@ -6,6 +6,7 @@ import {
   ChevronRight,
   CircleAlert,
   Clock3,
+  Eye,
   LoaderCircle,
   MapPin,
   Pencil,
@@ -529,7 +530,7 @@ export default function ManageEventsPage() {
                           <div className="flex justify-end gap-2">
                             <Button
                               aria-label={`Edit ${event.title}`}
-                              className="rounded-lg"
+                              className="rounded-lg border-emerald-200 bg-emerald-50/70 text-emerald-800 transition-colors hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300 dark:hover:bg-emerald-950/70"
                               onClick={() => openEditor(event)}
                               size="sm"
                               variant="outline"
@@ -539,13 +540,28 @@ export default function ManageEventsPage() {
                             </Button>
                             <Button
                               aria-label={`Delete ${event.title}`}
-                              className="rounded-lg"
+                              className="rounded-lg border-rose-200 bg-rose-50 text-rose-700 transition-colors hover:border-rose-300 hover:bg-rose-100 dark:border-rose-900/70 dark:bg-rose-950/30 dark:text-rose-300 dark:hover:bg-rose-950/60"
                               onClick={() => setDeletingEvent(event)}
                               size="sm"
-                              variant="destructive"
+                              variant="outline"
                             >
                               <Trash2 aria-hidden="true" />
                               Delete
+                            </Button>
+                            <Button
+                              aria-label={`View ${event.title}`}
+                              className="rounded-lg border-slate-200 bg-slate-50 text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                              nativeButton={false}
+                              render={
+                                <Link
+                                  href={`/event-details/${encodeURIComponent(event._id)}`}
+                                />
+                              }
+                              size="sm"
+                              variant="outline"
+                            >
+                              <Eye aria-hidden="true" />
+                              View
                             </Button>
                           </div>
                         </td>
@@ -605,9 +621,9 @@ export default function ManageEventsPage() {
                         </span>
                       </p>
                     </div>
-                    <div className="mt-4 flex gap-2">
+                    <div className="mt-4 grid grid-cols-3 gap-2">
                       <Button
-                        className="flex-1 rounded-lg"
+                        className="min-w-0 rounded-lg border-emerald-200 bg-emerald-50/70 px-2 text-emerald-800 transition-colors hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300 dark:hover:bg-emerald-950/70"
                         onClick={() => openEditor(event)}
                         variant="outline"
                       >
@@ -615,12 +631,25 @@ export default function ManageEventsPage() {
                         Edit
                       </Button>
                       <Button
-                        className="flex-1 rounded-lg"
+                        className="min-w-0 rounded-lg border-rose-200 bg-rose-50 px-2 text-rose-700 transition-colors hover:border-rose-300 hover:bg-rose-100 dark:border-rose-900/70 dark:bg-rose-950/30 dark:text-rose-300 dark:hover:bg-rose-950/60"
                         onClick={() => setDeletingEvent(event)}
-                        variant="destructive"
+                        variant="outline"
                       >
                         <Trash2 aria-hidden="true" />
                         Delete
+                      </Button>
+                      <Button
+                        className="min-w-0 rounded-lg border-slate-200 bg-slate-50 px-2 text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                        nativeButton={false}
+                        render={
+                          <Link
+                            href={`/event-details/${encodeURIComponent(event._id)}`}
+                          />
+                        }
+                        variant="outline"
+                      >
+                        <Eye aria-hidden="true" />
+                        View
                       </Button>
                     </div>
                   </article>

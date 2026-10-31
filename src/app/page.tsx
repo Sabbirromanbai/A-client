@@ -1,6 +1,7 @@
 import {
   ArrowRight,
   CalendarDays,
+  CircleAlert,
   Heart,
   Sparkles,
   UsersRound,
@@ -8,35 +9,79 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { connection } from "next/server";
+import { Suspense, type ReactNode } from "react";
 import NewsletterForm from "@/components/NewsletterForm";
+import HeroStats from "@/components/home/HeroStats";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Event = {
   _id: string;
   title: string;
   description: string;
   eventType: string;
-  thumbnailUrl: string;
+  thumbnailUrl?: string;
   location: string;
   eventDate: string;
 };
 
-async function getRecentEvents(): Promise<Event[]> {
+async function getUpcomingEvents(now: number): Promise<Event[]> {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+  const response = await fetch(`${apiUrl}/api/events?limit=6`, {
+    next: { revalidate: 60 },
+  });
+  if (!response.ok) {
+    throw new Error(`The events service returned status ${response.status}.`);
+  }
+
+  const data: unknown = await response.json();
+  if (
+    typeof data !== "object" ||
+    data === null ||
+    !("success" in data) ||
+    data.success !== true ||
+    !("events" in data) ||
+    !Array.isArray(data.events)
+  ) {
+    throw new Error("The events service returned an invalid response.");
+  }
+
+  const events = data.events.filter(
+    (event): event is Event =>
+      typeof event === "object" &&
+      event !== null &&
+      "_id" in event &&
+      typeof event._id === "string" &&
+      "title" in event &&
+      typeof event.title === "string" &&
+      "description" in event &&
+      typeof event.description === "string" &&
+      "eventType" in event &&
+      typeof event.eventType === "string" &&
+      "location" in event &&
+      typeof event.location === "string" &&
+      "eventDate" in event &&
+      typeof event.eventDate === "string" &&
+      Number.isFinite(Date.parse(event.eventDate)) &&
+      (!("thumbnailUrl" in event) || typeof event.thumbnailUrl === "string"),
+  );
+
+  return events
+    .filter((event) => Date.parse(event.eventDate) > now)
+    .sort((a, b) => Date.parse(a.eventDate) - Date.parse(b.eventDate))
+    .slice(0, 6);
+}
+
+async function loadUpcomingEvents(): Promise<{
+  events: Event[];
+  failed: boolean;
+}> {
+  const now = Date.now();
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-
-    const response = await fetch(`${apiUrl}/api/events?limit=6`, {
-      next: { revalidate: 60 },
-    });
-
-    if (!response.ok) return [];
-
-    const data = await response.json();
-
-    return data.success && Array.isArray(data.events)
-      ? data.events.slice(0, 6)
-      : [];
-  } catch {
-    return [];
+    return { events: await getUpcomingEvents(now), failed: false };
+  } catch (error) {
+    console.error("Failed to load upcoming community events.", error);
+    return { events: [], failed: true };
   }
 }
 
@@ -125,10 +170,10 @@ function EventCard({ event }: { event: Event }) {
         </div>
 
         <Link
-          href={`/upcoming-events`}
+          href={`/event-details/${encodeURIComponent(event._id)}`}
           className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-emerald-50 py-3 font-semibold text-emerald-700 transition hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-950"
         >
-          View Events
+          View Details
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
@@ -136,9 +181,119 @@ function EventCard({ event }: { event: Event }) {
   );
 }
 
-export default async function Home() {
-  const events = await getRecentEvents();
+function UpcomingEventsHeading() {
+  return (
+    <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+      <div>
+        <p className="mb-3 text-sm font-bold uppercase tracking-widest text-emerald-600">
+          Make a Difference
+        </p>
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+          Upcoming Community Events
+        </h2>
+        <p className="mt-3 text-slate-500 dark:text-slate-400">
+          Discover meaningful events and become part of something good.
+        </p>
+      </div>
+      <Link
+        href="/upcoming-events"
+        className="inline-flex items-center gap-2 font-semibold text-emerald-700 hover:text-emerald-600 dark:text-emerald-400"
+      >
+        Explore All Events
+        <ArrowRight className="h-4 w-4" />
+      </Link>
+    </div>
+  );
+}
 
+function UpcomingEventsSection({ children }: { children: ReactNode }) {
+  return (
+    <section className="bg-white px-5 py-20 dark:bg-slate-950 sm:px-8 lg:px-10">
+      <div className="mx-auto max-w-7xl">
+        <UpcomingEventsHeading />
+        {children}
+      </div>
+    </section>
+  );
+}
+
+async function UpcomingCommunityEvents() {
+  await connection();
+  const { events, failed } = await loadUpcomingEvents();
+  if (failed) {
+    return (
+      <UpcomingEventsSection>
+        <div
+          className="rounded-3xl border border-dashed border-rose-200 bg-rose-50/70 px-6 py-16 text-center dark:border-rose-900/70 dark:bg-rose-950/20"
+          role="alert"
+        >
+          <CircleAlert className="mx-auto h-10 w-10 text-rose-600 dark:text-rose-400" />
+          <h3 className="mt-4 text-xl font-bold text-slate-800 dark:text-white">
+            Events couldn&apos;t be loaded
+          </h3>
+          <p className="mt-2 text-slate-600 dark:text-slate-300">
+            Please try again later or explore all community events.
+          </p>
+          <Link
+            className="mt-5 inline-flex items-center gap-2 font-semibold text-emerald-700 hover:text-emerald-600 dark:text-emerald-400"
+            href="/upcoming-events"
+          >
+            Explore All Events <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </UpcomingEventsSection>
+    );
+  }
+
+  return (
+    <UpcomingEventsSection>
+      {events.length > 0 ? (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {events.map((event) => (
+            <EventCard key={event._id} event={event} />
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-6 py-16 text-center dark:border-slate-700 dark:bg-slate-900">
+          <CalendarDays className="mx-auto h-10 w-10 text-emerald-500" />
+          <h3 className="mt-4 text-xl font-bold text-slate-800 dark:text-white">
+            No Upcoming Events
+          </h3>
+          <p className="mt-2 text-slate-500 dark:text-slate-400">
+            New community events will appear here soon.
+          </p>
+        </div>
+      )}
+    </UpcomingEventsSection>
+  );
+}
+
+function UpcomingEventsLoading() {
+  return (
+    <UpcomingEventsSection>
+      <div
+        aria-label="Loading upcoming events"
+        className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        role="status"
+      >
+        {Array.from({ length: 6 }, (_, index) => (
+          <div
+            className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white p-6 dark:border-slate-800 dark:bg-slate-900"
+            key={index}
+          >
+            <Skeleton className="h-52 w-full rounded-2xl" />
+            <Skeleton className="mt-5 h-6 w-3/4" />
+            <Skeleton className="mt-3 h-12 w-full" />
+            <Skeleton className="mt-5 h-10 w-full" />
+          </div>
+        ))}
+        <span className="sr-only">Loading upcoming community events…</span>
+      </div>
+    </UpcomingEventsSection>
+  );
+}
+
+export default function Home() {
   return (
     <main className="relative isolate flex-1 overflow-hidden bg-[#fbfdf9] transition-colors duration-300 dark:bg-slate-950">
       {/* Background Decorations */}
@@ -224,54 +379,11 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Upcoming Events Section */}
-      <section className="bg-white px-5 py-20 dark:bg-slate-950 sm:px-8 lg:px-10">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-            <div>
-              <p className="mb-3 text-sm font-bold uppercase tracking-widest text-emerald-600">
-                Make a Difference
-              </p>
+      <HeroStats />
 
-              <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
-                Upcoming Community Events
-              </h2>
-
-              <p className="mt-3 text-slate-500 dark:text-slate-400">
-                Discover meaningful events and become part of something good.
-              </p>
-            </div>
-
-            <Link
-              href="/upcoming-events"
-              className="inline-flex items-center gap-2 font-semibold text-emerald-700 hover:text-emerald-600 dark:text-emerald-400"
-            >
-              Explore All Events
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          {events.length > 0 ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {events.map((event) => (
-                <EventCard key={event._id} event={event} />
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-6 py-16 text-center dark:border-slate-700 dark:bg-slate-900">
-              <CalendarDays className="mx-auto h-10 w-10 text-emerald-500" />
-
-              <h3 className="mt-4 text-xl font-bold text-slate-800 dark:text-white">
-                No Upcoming Events
-              </h3>
-
-              <p className="mt-2 text-slate-500 dark:text-slate-400">
-                New community events will appear here soon.
-              </p>
-            </div>
-          )}
-        </div>
-      </section>
+      <Suspense fallback={<UpcomingEventsLoading />}>
+        <UpcomingCommunityEvents />
+      </Suspense>
 
       {/* Why GoodTogether Section */}
       <section className="relative overflow-hidden bg-[#f5faf6] px-5 py-24 dark:bg-slate-900/60 sm:px-8 lg:px-10">
@@ -385,58 +497,54 @@ export default async function Home() {
             </Link>
           </div>
 
-          <div className="grid auto-rows-[220px] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[
               {
                 title: "Community Together",
                 category: "Teamwork",
                 image:
                   "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8",
-                size: "lg:col-span-2 lg:row-span-2",
               },
               {
                 title: "Growing a Greener Future",
                 category: "Tree Plantation",
                 image:
                   "https://images.unsplash.com/photo-1441974231531-c6227db76b6e",
-                size: "",
               },
               {
                 title: "Helping Hands",
                 category: "Volunteering",
                 image:
                   "https://images.unsplash.com/photo-1559027615-cd4628902d4a",
-                size: "",
               },
               {
                 title: "Making a Difference",
                 category: "Community Care",
                 image:
                   "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b",
-                size: "lg:col-span-2",
               },
             ].map((photo) => (
-              <div
+              <article
                 key={photo.title}
-                role="img"
-                aria-label={photo.title}
-                className={`group relative isolate overflow-hidden rounded-3xl bg-slate-200 bg-cover bg-center dark:bg-slate-800 ${photo.size}`}
-                style={{
-                  backgroundImage: `url("${photo.image}?auto=format&fit=crop&w=1200&q=85")`,
-                }}
+                className="group overflow-hidden rounded-3xl border border-slate-200/80 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-900/10 dark:border-slate-800 dark:bg-slate-900"
               >
-                <div className="absolute inset-0 -z-10 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent transition duration-500 group-hover:from-emerald-950/90" />
-
-                <div className="absolute bottom-0 left-0 p-6 transition-transform duration-500 group-hover:-translate-y-2">
-                  <span className="rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur-md">
+                <div
+                  aria-label={photo.title}
+                  className="relative aspect-[16/10] overflow-hidden bg-emerald-50 bg-cover bg-center transition-transform duration-500 group-hover:scale-[1.02] dark:bg-slate-800"
+                  role="img"
+                  style={{
+                    backgroundImage: `url("${photo.image}?auto=format&fit=crop&w=1200&q=85")`,
+                  }}
+                />
+                <div className="p-5">
+                  <span className="inline-flex rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
                     {photo.category}
                   </span>
-
-                  <h3 className="mt-3 text-xl font-bold text-white">
+                  <h3 className="mt-3 text-lg font-bold text-slate-900 dark:text-white">
                     {photo.title}
                   </h3>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         </div>
