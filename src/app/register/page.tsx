@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -12,6 +13,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -38,7 +40,7 @@ export default function RegisterPage() {
 
     if (!passwordRequirements.test(password)) {
       setErrorMessage(
-        "Password must be at least 6 characters and include one uppercase and one lowercase letter.",
+        "Password must be at least 6 characters and include one uppercase and one lowercase letter."
       );
       return;
     }
@@ -66,14 +68,18 @@ export default function RegisterPage() {
       });
 
       if (error) {
-        setErrorMessage(error.message || "We couldn't create your account. Please try again.");
+        setErrorMessage(
+          error.message || "We couldn't create your account. Please try again."
+        );
         return;
       }
 
-      setSuccessMessage("Your account is ready! Taking you to GoodTogether...");
+      setSuccessMessage("Your account is ready! Welcome to GoodTogether...");
       window.setTimeout(() => router.replace("/"), 1200);
     } catch {
-      setErrorMessage("Something went wrong. Please check your details and try again.");
+      setErrorMessage(
+        "Something went wrong. Please check your details and try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -93,192 +99,242 @@ export default function RegisterPage() {
       });
 
       if (error) {
-        setErrorMessage(
-          error.message ||
-            "Google sign-up is unavailable because the Google provider is not configured.",
-        );
+        setErrorMessage(error.message || "Google sign-up is unavailable.");
       }
     } catch {
-      setErrorMessage(
-        "Google sign-up is unavailable because the Google provider is not configured.",
-      );
+      setErrorMessage("Google sign-up is unavailable.");
     } finally {
       setIsGoogleLoading(false);
     }
   }
 
   return (
-    <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-slate-950 p-4 sm:p-6 lg:p-8">
-      {/* Dynamic Background Mesh Grids & Glow */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
-      <div className="absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-emerald-600/30 blur-[140px] pointer-events-none" />
-      <div className="absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-cyan-600/25 blur-[140px] pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[350px] w-[350px] rounded-full bg-teal-500/20 blur-[130px] pointer-events-none" />
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f0fdf7] px-4 py-8 text-slate-900 transition-colors duration-500 dark:bg-[#06140f] dark:text-slate-100 sm:px-6 lg:py-12">
 
-      {/* Main Glassmorphism Split / Hero Card */}
-      <div className="relative z-10 flex w-full max-w-5xl overflow-hidden rounded-3xl border border-white/10 bg-slate-900/60 backdrop-blur-xl shadow-2xl shadow-emerald-950/50">
-        
-        {/* Left Side: Modern Interactive / Branding Banner */}
-        <div className="hidden w-1/2 flex-col justify-between border-r border-white/10 bg-gradient-to-br from-emerald-950/60 via-slate-900/80 to-slate-950/90 p-12 lg:flex">
-          <div className="space-y-6">
-            <BrandLogo className="h-10 w-auto" orientation="horizontal" />
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-medium text-emerald-300">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-              </span>
-              Join GoodTogether Community
+      {/* Background */}
+      <div className="pointer-events-none absolute -left-32 -top-32 h-[30rem] w-[30rem] rounded-full bg-emerald-300/30 blur-[110px] dark:bg-emerald-700/15" />
+      <div className="pointer-events-none absolute -bottom-40 -right-32 h-[32rem] w-[32rem] rounded-full bg-lime-300/30 blur-[120px] dark:bg-lime-700/10" />
+
+      {/* Main Card */}
+      <section className="relative grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/80 bg-white/80 shadow-[0_30px_100px_-30px_rgba(4,120,87,0.25)] backdrop-blur-2xl transition-colors duration-500 dark:border-white/10 dark:bg-slate-900/80 dark:shadow-black/40 lg:grid-cols-[0.9fr_1.1fr]">
+
+        {/* Left Branding Panel */}
+        <div className="relative hidden min-h-[720px] flex-col justify-between overflow-hidden bg-gradient-to-br from-[#047857] via-[#065f46] to-[#022c22] p-10 text-white lg:flex xl:p-14">
+
+          <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-32 -left-24 h-96 w-96 rounded-full border border-white/10 bg-emerald-300/[0.06] backdrop-blur-2xl" />
+          <div className="pointer-events-none absolute right-12 top-1/2 h-32 w-32 rounded-full bg-emerald-300/20 blur-3xl" />
+
+          <div className="relative z-10">
+            <Link href="/" aria-label="GoodTogether home" className="inline-flex rounded-xl">
+              <BrandLogo inverse />
+            </Link>
+
+            <div className="mt-24 max-w-sm">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold tracking-wide text-emerald-100 backdrop-blur-xl">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-lime-300 opacity-75" />
+                  <span className="relative h-2 w-2 rounded-full bg-lime-300" />
+                </span>
+                JOIN OUR COMMUNITY
+              </div>
+
+              <h1 className="text-4xl font-extrabold leading-[1.15] tracking-tight xl:text-5xl">
+                Be part of something
+                <span className="mt-2 block text-emerald-200">
+                  bigger than yourself.
+                </span>
+              </h1>
+
+              <p className="mt-6 text-base leading-8 text-emerald-100/90">
+                Every meaningful change starts with someone taking the first
+                step. Join GoodTogether and turn small actions into lasting
+                impact.
+              </p>
+
+              <div className="mt-10 grid grid-cols-2 gap-3">
+                <div className="rounded-2xl border border-white/15 bg-white/[0.08] p-4 backdrop-blur-xl">
+                  <span className="text-2xl">🌱</span>
+                  <p className="mt-3 text-sm font-bold">Grow Together</p>
+                  <p className="mt-1 text-xs text-emerald-100/70">
+                    Build meaningful connections.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-white/15 bg-white/[0.08] p-4 backdrop-blur-xl">
+                  <span className="text-2xl">💚</span>
+                  <p className="mt-3 text-sm font-bold">Make an Impact</p>
+                  <p className="mt-1 text-xs text-emerald-100/70">
+                    Turn kindness into action.
+                  </p>
+                </div>
+              </div>
             </div>
-            <h2 className="text-4xl font-extrabold tracking-tight text-white leading-tight">
-              Empower your journey with every action.
-            </h2>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              Experience a modern platform built for high-performance collaboration, transparent community impact, and seamless onboarding.
-            </p>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
-            <p className="text-xs italic text-slate-300">
-              "GoodTogether made organizing our community initiatives effortless. The platform feels smooth, incredibly fast, and inspiring."
-            </p>
-            <div className="mt-3 flex items-center gap-3">
-              <div className="h-8 w-8 rounded-full bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-xs font-bold text-emerald-300">
-                AM
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-white">Alex Morgan</p>
-                <p className="text-[11px] text-slate-400">Community Lead</p>
-              </div>
-            </div>
-          </div>
+          <p className="relative z-10 text-sm text-emerald-200/80">
+            Together We Make Change.
+          </p>
         </div>
 
-        {/* Right Side: High-End Registration Form */}
-        <div className="w-full p-8 sm:p-12 lg:w-1/2">
-          <div className="mb-8 lg:hidden">
-            <BrandLogo className="mb-4" orientation="stacked" />
-          </div>
-          
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-              Create an Account
-            </h1>
-            <p className="mt-2 text-sm text-slate-400">
-              Enter your details below to get started with your account.
+        {/* Registration Form */}
+        <div className="relative p-7 sm:p-10 lg:p-12 xl:p-14">
+
+          <div className="mb-8 text-center lg:text-left">
+            <BrandLogo className="mb-7 lg:hidden" orientation="stacked" />
+
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-emerald-600 dark:text-emerald-400">
+              Start your journey
+            </p>
+
+            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+              Create your account
+            </h2>
+
+            <p className="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">
+              Join a community that makes every day meaningful.
             </p>
           </div>
 
           <form className="space-y-4" onSubmit={handleSubmit} noValidate>
+
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="name">
-                Full Name
+              <label htmlFor="name" className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">
+                Full name
               </label>
               <input
                 autoComplete="name"
-                className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white placeholder-slate-500 backdrop-blur-md outline-none transition duration-200 focus:border-emerald-500 focus:bg-slate-950/80 focus:ring-2 focus:ring-emerald-500/20"
                 id="name"
                 name="name"
                 placeholder="Alex Morgan"
                 required
                 type="text"
+                className="w-full rounded-2xl border border-slate-200 bg-white/70 px-4 py-3.5 text-sm text-slate-900 outline-none backdrop-blur-xl transition-all duration-300 placeholder:text-slate-400 hover:border-emerald-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 dark:border-slate-700 dark:bg-slate-950/50 dark:text-white dark:placeholder:text-slate-500 dark:focus:bg-slate-950"
               />
             </div>
 
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="email">
-                Email Address
+              <label htmlFor="email" className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">
+                Email address
               </label>
               <input
                 autoComplete="email"
-                className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white placeholder-slate-500 backdrop-blur-md outline-none transition duration-200 focus:border-emerald-500 focus:bg-slate-950/80 focus:ring-2 focus:ring-emerald-500/20"
                 id="email"
                 name="email"
                 placeholder="you@example.com"
                 required
                 type="email"
+                className="w-full rounded-2xl border border-slate-200 bg-white/70 px-4 py-3.5 text-sm text-slate-900 outline-none backdrop-blur-xl transition-all duration-300 placeholder:text-slate-400 hover:border-emerald-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 dark:border-slate-700 dark:bg-slate-950/50 dark:text-white dark:placeholder:text-slate-500 dark:focus:bg-slate-950"
               />
             </div>
 
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="password">
+              <label htmlFor="password" className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">
                 Password
               </label>
-              <input
-                autoComplete="new-password"
-                className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white placeholder-slate-500 backdrop-blur-md outline-none transition duration-200 focus:border-emerald-500 focus:bg-slate-950/80 focus:ring-2 focus:ring-emerald-500/20"
-                id="password"
-                name="password"
-                placeholder="••••••••"
-                required
-                type="password"
-              />
-              <p className="mt-1.5 text-[11px] text-slate-400">
-                Min. 6 chars with uppercase & lowercase letters.
+
+              <div className="relative">
+                <input
+                  autoComplete="new-password"
+                  id="password"
+                  name="password"
+                  placeholder="Create a strong password"
+                  required
+                  type={showPassword ? "text" : "password"}
+                  className="w-full rounded-2xl border border-slate-200 bg-white/70 px-4 py-3.5 pr-12 text-sm text-slate-900 outline-none backdrop-blur-xl transition-all duration-300 placeholder:text-slate-400 hover:border-emerald-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 dark:border-slate-700 dark:bg-slate-950/50 dark:text-white dark:placeholder:text-slate-500 dark:focus:bg-slate-950"
+                />
+
+                <button
+                  type="button"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  onClick={() => setShowPassword((visible) => !visible)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-xl p-2 text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:hover:bg-slate-800 dark:hover:text-emerald-300"
+                >
+                  {showPassword ? (
+                    <svg aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                      <path d="M3 3l18 18M10.58 10.58a2 2 0 0 0 2.83 2.83M9.88 4.24A10.84 10.84 0 0 1 12 4c5 0 8.5 4 9.5 8a11.5 11.5 0 0 1-2.03 4.02m-3.4 2.2A10.8 10.8 0 0 1 12 20c-5 0-8.5-4-9.5-8a11.4 11.4 0 0 1 3.7-5.4" />
+                    </svg>
+                  ) : (
+                    <svg aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                      <path d="M2.5 12s3.5-7 9.5-7 9.5 7 9.5 7-3.5 7-9.5 7-9.5-7-9.5-7Z" />
+                      <circle cx="12" cy="12" r="2.5" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+
+              <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
+                At least 6 characters, including uppercase and lowercase letters.
               </p>
             </div>
 
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="image">
-                Profile Photo URL <span className="font-normal text-slate-500">(optional)</span>
+              <label htmlFor="image" className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">
+                Profile photo URL <span className="font-normal text-slate-400">(optional)</span>
               </label>
               <input
-                className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white placeholder-slate-500 backdrop-blur-md outline-none transition duration-200 focus:border-emerald-500 focus:bg-slate-950/80 focus:ring-2 focus:ring-emerald-500/20"
                 id="image"
                 name="image"
                 placeholder="https://example.com/photo.jpg"
                 type="url"
+                className="w-full rounded-2xl border border-slate-200 bg-white/70 px-4 py-3.5 text-sm text-slate-900 outline-none backdrop-blur-xl transition-all duration-300 placeholder:text-slate-400 hover:border-emerald-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 dark:border-slate-700 dark:bg-slate-950/50 dark:text-white dark:placeholder:text-slate-500 dark:focus:bg-slate-950"
               />
             </div>
 
             {errorMessage && (
-              <div aria-live="polite" className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs text-red-300 backdrop-blur-md" role="alert">
+              <div aria-live="polite" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300" role="alert">
                 {errorMessage}
               </div>
             )}
+
             {successMessage && (
-              <div aria-live="polite" className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-xs text-emerald-300 backdrop-blur-md" role="status">
+              <div aria-live="polite" className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300" role="status">
                 {successMessage}
               </div>
             )}
 
             <button
-              className="mt-2 w-full rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 px-4 py-3.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:brightness-110 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-emerald-400/50 disabled:cursor-not-allowed disabled:opacity-50"
+              className="group relative w-full overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 px-4 py-4 text-sm font-bold text-white shadow-xl shadow-emerald-700/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-emerald-700/30 focus:outline-none focus:ring-4 focus:ring-emerald-300/40 disabled:cursor-not-allowed disabled:opacity-60"
               disabled={isLoading || isGoogleLoading}
               type="submit"
             >
-              {isLoading ? "Creating account..." : "Get Started Now"}
+              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+              <span className="relative">
+                {isLoading ? "Creating your account..." : "Create your account"}
+              </span>
             </button>
           </form>
 
-          <div className="my-6 flex items-center gap-3">
-            <div className="h-px flex-1 bg-white/10" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">OR</span>
-            <div className="h-px flex-1 bg-white/10" />
+          <div className="my-7 flex items-center gap-4">
+            <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">or</span>
+            <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
           </div>
 
           <button
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-200 backdrop-blur-md transition duration-200 hover:bg-white/10 hover:border-white/20 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+            className="group flex w-full items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white/80 px-4 py-4 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-emerald-50 hover:shadow-lg hover:shadow-emerald-900/5 focus:outline-none focus:ring-4 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950/50 dark:text-slate-200 dark:hover:border-emerald-700 dark:hover:bg-slate-800"
             disabled={isLoading || isGoogleLoading}
             onClick={handleGoogleSignUp}
             type="button"
           >
-            <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M21.35 12.23c0-.78-.07-1.54-.22-2.27H12v4.3h5.24a4.48 4.48 0 0 1-1.94 2.94v2.45h3.14c1.84-1.69 2.91-4.18 2.91-7.42Z" />
               <path fill="#34A853" d="M12 21.75c2.63 0 4.84-.87 6.45-2.35l-3.14-2.45c-.87.58-1.98.93-3.31.93-2.54 0-4.7-1.72-5.47-4.03H3.29v2.53A9.74 9.74 0 0 0 12 21.75Z" />
               <path fill="#FBBC05" d="M6.53 13.85A5.85 5.85 0 0 1 6.23 12c0-.64.11-1.27.3-1.85V7.62H3.29A9.75 9.75 0 0 0 2.25 12c0 1.57.38 3.06 1.04 4.38l3.24-2.53Z" />
               <path fill="#EA4335" d="M12 6.12c1.44 0 2.73.5 3.75 1.49l2.81-2.81C16.84 3.26 14.63 2.25 12 2.25a9.74 9.74 0 0 0-8.71 5.37l3.24 2.53c.77-2.31 2.93-4.03 5.47-4.03Z" />
             </svg>
-            {isGoogleLoading ? "Connecting..." : "Continue with Google"}
+            {isGoogleLoading ? "Connecting to Google..." : "Continue with Google"}
           </button>
 
-          <p className="mt-6 text-center text-xs text-slate-400">
+          <p className="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
             Already have an account?{" "}
-            <Link className="font-semibold text-emerald-400 transition hover:text-emerald-300 hover:underline" href="/login">
-              Sign In
+            <Link className="font-bold text-emerald-700 transition-colors hover:text-emerald-500 dark:text-emerald-400 dark:hover:text-emerald-300" href="/login">
+              Sign in →
             </Link>
           </p>
+
         </div>
-      </div>
+      </section>
     </main>
   );
 }
