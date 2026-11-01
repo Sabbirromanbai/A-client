@@ -2,12 +2,19 @@
 
 import {
   CalendarDays,
+  CalendarCheck,
   CalendarHeart,
+  CalendarPlus,
   ChevronDown,
+  ClipboardList,
+  House,
+  LogIn,
   LogOut,
   Menu,
+  Moon,
   ArrowUpRight,
   Settings,
+  Sun,
   User,
   Users,
   X,
@@ -37,6 +44,12 @@ const profileLinks = [
   { href: "/create-event", label: "Create Event", icon: CalendarDays },
   { href: "/manage-events", label: "Manage Events", icon: Settings },
   { href: "/joined-events", label: "Joined Events", icon: Users },
+];
+
+const mobileProfileLinks = [
+  { href: "/create-event", label: "Create Event", icon: CalendarPlus },
+  { href: "/manage-events", label: "Manage Events", icon: ClipboardList },
+  { href: "/joined-events", label: "Joined Events", icon: CalendarCheck },
 ];
 
 function CommunityMark({ className = "h-[1.125rem] w-[1.125rem]" }: { className?: string }) {
@@ -74,6 +87,7 @@ export default function Navbar() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
+  const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
   const logoutRequestInProgress = useRef(false);
   const user = session?.user;
   const userInitial = (user?.name?.trim().charAt(0) || user?.email?.charAt(0) || "G").toUpperCase();
@@ -91,6 +105,9 @@ export default function Navbar() {
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
+        if (isMobileMenuOpen) {
+          mobileMenuButtonRef.current?.focus();
+        }
         setIsMobileMenuOpen(false);
       }
     }
@@ -105,7 +122,7 @@ export default function Navbar() {
       document.removeEventListener("pointerdown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [isMobileMenuOpen]);
 
   async function handleLogout() {
     if (logoutRequestInProgress.current) return;
@@ -143,20 +160,6 @@ export default function Navbar() {
     setIsMobileMenuOpen(false);
   }
 
-  function renderProfileLinks() {
-    return profileLinks.map(({ href, label, icon: Icon }) => (
-      <Link
-        className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 transition duration-200 hover:bg-emerald-50 hover:text-emerald-800 dark:text-slate-300 dark:hover:bg-emerald-950/60 dark:hover:text-emerald-200"
-        href={href}
-        key={href}
-        onClick={closeMenus}
-      >
-        <Icon aria-hidden="true" className="h-4 w-4 text-emerald-700 transition-transform duration-200 group-hover:scale-110 dark:text-emerald-300" />
-        {label}
-      </Link>
-    ));
-  }
-
   return (
     <header className="sticky top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
       <div
@@ -167,14 +170,14 @@ export default function Navbar() {
         }`}
         ref={headerRef}
       >
-        <div className="grid min-h-[4.25rem] grid-cols-[1fr_auto] items-center gap-3 px-3 py-2 sm:min-h-[4.75rem] sm:px-5 md:grid-cols-[1fr_auto_1fr]">
+        <div className="grid min-h-[4.25rem] grid-cols-[1fr_auto] items-center gap-1 px-2 py-2 sm:min-h-[4.75rem] sm:gap-3 sm:px-5 md:grid-cols-[1fr_auto_1fr]">
           <Link
             aria-label="GoodTogether home"
-            className="group min-w-0 justify-self-start rounded-xl outline-none transition-opacity duration-200 hover:opacity-85 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
+            className="group min-w-0 shrink-0 justify-self-start rounded-xl outline-none transition-opacity duration-200 hover:opacity-85 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
             href="/"
             onClick={closeMenus}
           >
-            <BrandLogo />
+            <BrandLogo compact />
           </Link>
 
           <nav aria-label="Main navigation" className="hidden justify-self-center md:block">
@@ -187,7 +190,7 @@ export default function Navbar() {
             </Link>
           </nav>
 
-          <div className="flex items-center justify-self-end gap-1 sm:gap-2">
+          <div className="hidden items-center justify-self-end gap-1 sm:gap-2 md:flex">
             <button
               aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
               className="group relative flex h-10 w-[4.35rem] shrink-0 items-center rounded-[1.05rem] border border-emerald-200/80 bg-emerald-50/55 px-1 shadow-[inset_0_1px_2px_rgba(16,87,57,0.08)] backdrop-blur-xl transition-colors duration-300 hover:border-emerald-300 hover:bg-emerald-50/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:border-slate-700/90 dark:bg-slate-900/60 dark:hover:border-emerald-800 dark:hover:bg-slate-900 dark:focus-visible:ring-offset-slate-950"
@@ -277,33 +280,106 @@ export default function Navbar() {
               </Link>
             )}
 
+          </div>
+          <div className="flex items-center justify-self-end gap-0.5 px-0 pb-2 min-[360px]:gap-1 min-[360px]:px-1 md:hidden">
+            <button
+              aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-emerald-200/80 bg-emerald-50/55 text-emerald-800 shadow-sm transition-colors duration-200 hover:border-emerald-300 hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:border-slate-700/90 dark:bg-slate-900/60 dark:text-emerald-200 dark:hover:border-emerald-800 dark:hover:bg-slate-900 min-[360px]:h-9 min-[360px]:w-9"
+              disabled={!isReady}
+              onClick={toggleTheme}
+              type="button"
+            >
+              {isDark ? (
+                <Moon aria-hidden="true" className="h-4 w-4" strokeWidth={1.8} />
+              ) : (
+                <Sun aria-hidden="true" className="h-4 w-4" strokeWidth={1.8} />
+              )}
+            </button>
+
+            {user ? (
+              <Link
+                aria-label={`View ${user.name || "your"} profile`}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full outline-none ring-1 ring-emerald-500/60 transition-shadow hover:ring-2 focus-visible:ring-2 min-[360px]:h-9 min-[360px]:w-9"
+                href="/profile"
+                onClick={closeMenus}
+              >
+                <Avatar className="h-8 w-8">
+                  <AvatarImage alt="" src={user.image || undefined} />
+                  <AvatarFallback className="bg-gradient-to-br from-emerald-100 to-teal-200 text-sm font-bold text-emerald-800 dark:from-emerald-900 dark:to-teal-900 dark:text-emerald-100">
+                    {userInitial}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
+            ) : (
+              <Link
+                aria-label="Login"
+                className="inline-flex h-8 shrink-0 items-center justify-center gap-0.5 rounded-full border border-emerald-700/35 bg-emerald-100/55 px-1 text-[0.7rem] font-semibold text-emerald-900 shadow-sm transition-colors hover:border-emerald-700/55 hover:bg-emerald-100/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 dark:border-emerald-400/25 dark:bg-emerald-950/55 dark:text-emerald-100 dark:hover:border-emerald-300/50 min-[360px]:h-9 min-[360px]:gap-1 min-[360px]:px-2 min-[360px]:text-xs"
+                href="/login"
+                onClick={closeMenus}
+              >
+                <LogIn aria-hidden="true" className="h-4 w-4" strokeWidth={1.8} />
+                Login
+              </Link>
+            )}
+
             <button
               aria-controls="mobile-navigation"
               aria-expanded={isMobileMenuOpen}
               aria-label={isMobileMenuOpen ? "Close mobile navigation" : "Open mobile navigation"}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-transparent text-slate-600 transition-all duration-200 hover:border-emerald-200/80 hover:bg-white/75 hover:text-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:bg-slate-900/75 dark:hover:text-emerald-200 md:hidden"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-emerald-200/80 text-slate-600 transition-all duration-200 hover:border-emerald-400 hover:bg-emerald-50/75 hover:text-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:border-slate-700 dark:text-slate-300 dark:hover:border-emerald-800 dark:hover:bg-slate-900/75 dark:hover:text-emerald-200 min-[360px]:h-9 min-[360px]:w-9"
               onClick={() => setIsMobileMenuOpen((open) => !open)}
+              ref={mobileMenuButtonRef}
               type="button"
             >
-              {isMobileMenuOpen ? <X aria-hidden="true" className="h-5 w-5" /> : <Menu aria-hidden="true" className="h-5 w-5" />}
+              {isMobileMenuOpen ? (
+                <X aria-hidden="true" className="h-4 w-4" strokeWidth={1.8} />
+              ) : (
+                <Menu aria-hidden="true" className="h-4 w-4" strokeWidth={1.8} />
+              )}
             </button>
           </div>
         </div>
 
-        {isMobileMenuOpen && (
           <nav
+            aria-hidden={!isMobileMenuOpen}
             aria-label="Mobile navigation"
-            className="absolute left-0 right-0 top-[calc(100%+0.65rem)] z-40 rounded-2xl border border-white/75 bg-white/92 p-2.5 shadow-[0_20px_60px_-24px_rgba(15,76,51,0.38)] backdrop-blur-2xl dark:border-slate-700/80 dark:bg-slate-900/92 dark:shadow-black/50 md:hidden"
+            className={`absolute left-2 right-2 top-[calc(100%+0.5rem)] z-40 max-h-[calc(100dvh-6rem)] overflow-y-auto rounded-2xl border border-white/75 bg-white/95 p-2.5 shadow-[0_20px_60px_-24px_rgba(15,76,51,0.38)] backdrop-blur-2xl transition-[opacity,transform,visibility] duration-200 ease-out motion-reduce:transition-none dark:border-slate-700/80 dark:bg-slate-900/95 dark:shadow-black/50 md:hidden ${
+              isMobileMenuOpen
+                ? "visible translate-y-0 scale-100 opacity-100"
+                : "invisible pointer-events-none -translate-y-2 scale-[0.98] opacity-0"
+            }`}
             id="mobile-navigation"
+            inert={!isMobileMenuOpen}
           >
+            <Link
+              className="group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:bg-emerald-50 hover:text-emerald-800 dark:text-slate-200 dark:hover:bg-emerald-950/60 dark:hover:text-emerald-200"
+              href="/"
+              onClick={closeMenus}
+            >
+              <House aria-hidden="true" className="h-4 w-4 text-emerald-700 dark:text-emerald-300" strokeWidth={1.8} />
+              Home
+            </Link>
             <Link
               className="group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:bg-emerald-50 hover:text-emerald-800 dark:text-slate-200 dark:hover:bg-emerald-950/60 dark:hover:text-emerald-200"
               href="/upcoming-events"
               onClick={closeMenus}
             >
-              <CalendarHeart aria-hidden="true" className="h-[1.125rem] w-[1.125rem] text-emerald-700 dark:text-emerald-300" />
+              <CalendarDays aria-hidden="true" className="h-4 w-4 text-emerald-700 dark:text-emerald-300" strokeWidth={1.8} />
               Upcoming Events
             </Link>
+
+            {user &&
+              mobileProfileLinks.map(({ href, label, icon: Icon }) => (
+                  <Link
+                    className="group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:bg-emerald-50 hover:text-emerald-800 dark:text-slate-200 dark:hover:bg-emerald-950/60 dark:hover:text-emerald-200"
+                    href={href}
+                    key={href}
+                    onClick={closeMenus}
+                  >
+                    <Icon aria-hidden="true" className="h-4 w-4 text-emerald-700 dark:text-emerald-300" strokeWidth={1.8} />
+                    {label}
+                  </Link>
+                ))}
 
             {!user && !isPending && (
               <Link
@@ -311,32 +387,39 @@ export default function Navbar() {
                 href="/login"
                 onClick={closeMenus}
               >
-                <CommunityMark className="h-[1.125rem] w-[1.125rem] text-emerald-700 dark:text-emerald-300" />
+                <Users aria-hidden="true" className="h-4 w-4 text-emerald-700 dark:text-emerald-300" strokeWidth={1.8} />
                 Join Community
-                <ArrowUpRight aria-hidden="true" className="ml-auto h-4 w-4" />
               </Link>
             )}
 
             {user && (
               <>
-                <div className="mx-3 my-2 border-t border-emerald-100/80 dark:border-slate-800" />
-                <div className="flex items-center gap-3 px-3 py-2">
-                    <Avatar className="h-9 w-9">
-                      <AvatarImage alt="" src={user.image || undefined} />
-                      <AvatarFallback className="bg-gradient-to-br from-emerald-100 to-teal-200 text-sm font-bold text-emerald-800 dark:from-emerald-900 dark:to-teal-900 dark:text-emerald-100">
-                        {userInitial}
-                      </AvatarFallback>
-                    </Avatar>
+                <div className="my-2 border-t border-emerald-100/80 dark:border-slate-800" />
+                <div className="flex items-center gap-3 rounded-xl px-3 py-2.5">
+                  <Avatar className="h-9 w-9 shrink-0 ring-1 ring-emerald-600/10">
+                    <AvatarImage alt="" src={user.image || undefined} />
+                    <AvatarFallback className="bg-gradient-to-br from-emerald-100 to-teal-200 text-sm font-bold text-emerald-800 dark:from-emerald-900 dark:to-teal-900 dark:text-emerald-100">
+                      {userInitial}
+                    </AvatarFallback>
+                  </Avatar>
                   <span className="min-w-0">
                     <span className="block truncate text-sm font-semibold text-slate-900 dark:text-white">{user.name || "GoodTogether member"}</span>
                     <span className="block truncate text-xs text-slate-500 dark:text-slate-400">{user.email}</span>
                   </span>
                 </div>
-                {renderProfileLinks()}
+                <button
+                  aria-label={isLoggingOut ? "Logging out" : "Logout"}
+                  className="mt-2 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-rose-300/70 bg-rose-50/70 px-3 py-2.5 text-sm font-semibold text-rose-600 transition-colors hover:border-rose-400 hover:bg-rose-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 disabled:cursor-wait disabled:opacity-60 dark:border-rose-900/70 dark:bg-rose-950/35 dark:text-rose-400 dark:hover:border-rose-800 dark:hover:bg-rose-950/60"
+                  disabled={isLoggingOut}
+                  onClick={() => void handleLogout()}
+                  type="button"
+                >
+                  <LogOut aria-hidden="true" className="h-4 w-4" strokeWidth={1.8} />
+                  {isLoggingOut ? "Logging out..." : "Logout"}
+                </button>
               </>
             )}
           </nav>
-        )}
       </div>
     </header>
   );
