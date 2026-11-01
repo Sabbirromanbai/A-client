@@ -1,11 +1,16 @@
 import {
   ArrowRight,
   CalendarDays,
+  BookOpen,
   CircleAlert,
+  HeartHandshake,
+  HandHeart,
   Heart,
   Sparkles,
+  Sprout,
   UsersRound,
   MapPin,
+  type LucideIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,6 +31,93 @@ type Event = {
   location: string;
   eventDate: string;
 };
+
+type GalleryPhoto = {
+  title: string;
+  category: string;
+  description: string;
+  date: string;
+  dateTime: string;
+  location: string;
+  image: string;
+  alt: string;
+  categoryIcon: LucideIcon;
+};
+
+const galleryPhotos: GalleryPhoto[] = [
+  {
+    title: "Community Together",
+    category: "Teamwork",
+    description:
+      "Neighbors shared time, care, and fresh produce with families in need.",
+    date: "October 18, 2026",
+    dateTime: "2026-10-18",
+    location: "Dhaka",
+    image: "/image-1.jpg",
+    alt: "Volunteers distributing fresh food to families at a community event.",
+    categoryIcon: UsersRound,
+  },
+  {
+    title: "Growing a Greener Future",
+    category: "Tree Plantation",
+    description:
+      "Local volunteers planted young trees to help their neighborhood thrive.",
+    date: "October 4, 2026",
+    dateTime: "2026-10-04",
+    location: "Sylhet",
+    image: "/image-2.jpg",
+    alt: "Community volunteers planting trees together.",
+    categoryIcon: Sprout,
+  },
+  {
+    title: "Helping Hands",
+    category: "Volunteering",
+    description:
+      "A team effort turned a well-loved public space into a cleaner place to gather.",
+    date: "September 20, 2026",
+    dateTime: "2026-09-20",
+    location: "Rajshahi",
+    image: "/image-4.jpg",
+    alt: "Volunteers working together to clean a neighborhood park.",
+    categoryIcon: HandHeart,
+  },
+  {
+    title: "Making a Difference",
+    category: "Community Care",
+    description:
+      "Patient mentors made room for curiosity, confidence, and new possibilities.",
+    date: "September 6, 2026",
+    dateTime: "2026-09-06",
+    location: "Chattogram",
+    image: "/image-3.jpg",
+    alt: "A volunteer helping children learn in a community classroom.",
+    categoryIcon: HeartHandshake,
+  },
+  {
+    title: "Learning Opens Doors",
+    category: "Education",
+    description:
+      "Young learners and caring mentors spent an inspiring day discovering new ideas.",
+    date: "August 23, 2026",
+    dateTime: "2026-08-23",
+    location: "Khulna",
+    image: "/image-3.jpg",
+    alt: "Children taking part in a community learning session.",
+    categoryIcon: BookOpen,
+  },
+  {
+    title: "Food Shared, Hope Grown",
+    category: "Food Drive",
+    description:
+      "A neighborhood food drive brought fresh essentials and friendly support to local families.",
+    date: "August 9, 2026",
+    dateTime: "2026-08-09",
+    location: "Dhaka",
+    image: "/image-1.jpg",
+    alt: "Community volunteers sharing fresh groceries with families.",
+    categoryIcon: Heart,
+  },
+];
 
 async function getUpcomingEvents(now: number): Promise<Event[]> {
   const response = await fetch(getApiUrl("api/events?limit=6"), {
@@ -489,55 +581,62 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              {
-                title: "Community Together",
-                category: "Teamwork",
-                image:
-                  "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8",
-              },
-              {
-                title: "Growing a Greener Future",
-                category: "Tree Plantation",
-                image:
-                  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e",
-              },
-              {
-                title: "Helping Hands",
-                category: "Volunteering",
-                image:
-                  "https://images.unsplash.com/photo-1559027615-cd4628902d4a",
-              },
-              {
-                title: "Making a Difference",
-                category: "Community Care",
-                image:
-                  "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b",
-              },
-            ].map((photo) => (
-              <article
-                key={photo.title}
-                className="group overflow-hidden rounded-3xl border border-slate-200/80 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-900/10 dark:border-slate-800 dark:bg-slate-900"
-              >
-                <div
-                  aria-label={photo.title}
-                  className="relative aspect-[16/10] overflow-hidden bg-emerald-50 bg-cover bg-center transition-transform duration-500 group-hover:scale-[1.02] dark:bg-slate-800"
-                  role="img"
-                  style={{
-                    backgroundImage: `url("${photo.image}?auto=format&fit=crop&w=1200&q=85")`,
-                  }}
-                />
-                <div className="p-5">
-                  <span className="inline-flex rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
-                    {photo.category}
-                  </span>
-                  <h3 className="mt-3 text-lg font-bold text-slate-900 dark:text-white">
-                    {photo.title}
-                  </h3>
-                </div>
-              </article>
-            ))}
+          <div className="grid items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {galleryPhotos.map((photo) => {
+              const CategoryIcon = photo.categoryIcon;
+
+              return (
+                <article
+                  key={photo.title}
+                  className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm shadow-slate-900/[0.03] transition duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-900/10 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-emerald-900"
+                >
+                  <div className="relative aspect-[16/10] overflow-hidden bg-emerald-50 dark:bg-slate-800">
+                    <Image
+                      alt={photo.alt}
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none"
+                      fill
+                      sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
+                      src={photo.image}
+                    />
+                    <div
+                      aria-hidden="true"
+                      className="absolute inset-0 bg-gradient-to-t from-slate-950/45 via-transparent to-slate-950/5"
+                    />
+                    <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/35 bg-slate-950/45 px-3 py-1.5 text-xs font-semibold text-white shadow-sm backdrop-blur-md">
+                      <CategoryIcon
+                        aria-hidden="true"
+                        className="h-3.5 w-3.5"
+                      />
+                      {photo.category}
+                    </span>
+                  </div>
+                  <div className="flex flex-1 flex-col p-5 sm:p-6">
+                    <h3 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+                      {photo.title}
+                    </h3>
+                    <p className="mt-2 min-h-12 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                      {photo.description}
+                    </p>
+                    <div className="mt-5 grid gap-2.5 border-t border-slate-100 pt-4 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
+                      <p className="flex items-center gap-2.5">
+                        <CalendarDays
+                          aria-hidden="true"
+                          className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400"
+                        />
+                        <time dateTime={photo.dateTime}>{photo.date}</time>
+                      </p>
+                      <p className="flex items-center gap-2.5">
+                        <MapPin
+                          aria-hidden="true"
+                          className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400"
+                        />
+                        {photo.location}, Bangladesh
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
