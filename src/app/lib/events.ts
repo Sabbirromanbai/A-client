@@ -1,3 +1,5 @@
+import { getApiUrl } from "./api-url";
+
 export type CommunityEvent = {
   _id: string;
   title: string;
@@ -76,11 +78,6 @@ function parseEvent(value: unknown): CommunityEvent | null {
         }
       : null,
   };
-}
-
-function getApiUrl(path: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-  return new URL(path, baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`);
 }
 
 export async function getEvents(): Promise<CommunityEvent[]> {

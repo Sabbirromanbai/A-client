@@ -11,7 +11,35 @@ if (!mongoUri) {
 
 const client = new MongoClient(mongoUri);
 
-const db = client.db(process.env.DB_NAME || "goodtogether");
+const db = client.db(process.env.DB_NAME?.trim() || "goodtogether");
+
+function getBetterAuthBaseUrl() {
+  if (process.env.NODE_ENV === "development") {
+    return undefined;
+  }
+
+  const configuredAuthUrl = process.env.BETTER_AUTH_URL?.trim();
+  if (!configuredAuthUrl) {
+    throw new Error("BETTER_AUTH_URL is required outside development.");
+  }
+
+  let authUrl: URL;
+  try {
+    authUrl = new URL(configuredAuthUrl);
+  } catch {
+    throw new Error("BETTER_AUTH_URL must be an absolute HTTP(S) URL.");
+  }
+
+  if (
+    !["http:", "https:"].includes(authUrl.protocol) ||
+    authUrl.username ||
+    authUrl.password
+  ) {
+    throw new Error("BETTER_AUTH_URL must be an absolute HTTP(S) URL.");
+  }
+
+  return authUrl.origin;
+}
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, {
@@ -44,8 +72,5 @@ export const auth = betterAuth({
 
   secret: process.env.BETTER_AUTH_SECRET,
 
-  baseURL:
-    process.env.NODE_ENV === "development"
-      ? undefined
-      : process.env.BETTER_AUTH_URL,
+  baseURL: getBetterAuthBaseUrl(),
 });

@@ -14,6 +14,7 @@ import { Suspense, type ReactNode } from "react";
 import NewsletterForm from "@/components/NewsletterForm";
 import HeroStats from "@/components/home/HeroStats";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getApiUrl } from "./lib/api-url";
 
 type Event = {
   _id: string;
@@ -26,17 +27,7 @@ type Event = {
 };
 
 async function getUpcomingEvents(now: number): Promise<Event[]> {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, "");
-
-  if (!apiUrl) {
-    throw new Error("NEXT_PUBLIC_API_URL is not configured.");
-  }
-
-  const endpoint = `${apiUrl}/api/events?limit=6`;
-
-  console.log("Final Events API URL:", endpoint);
-
-  const response = await fetch(endpoint, {
+  const response = await fetch(getApiUrl("api/events?limit=6"), {
     next: { revalidate: 60 },
   });
   if (!response.ok) {

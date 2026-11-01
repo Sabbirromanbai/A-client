@@ -1,6 +1,5 @@
 import { authClient } from "@/lib/auth-client";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+import { getApiUrl } from "./api-url";
 
 export type ApiRequestOptions<TBody = unknown> = Omit<
   RequestInit,
@@ -53,7 +52,7 @@ async function request<TResponse, TBody = unknown>(
   let response: Response;
 
   try {
-    response = await fetch(new URL(path, API_BASE_URL), {
+    response = await fetch(getApiUrl(path), {
       ...requestOptions,
       body: body === undefined ? undefined : JSON.stringify(body),
       headers: requestHeaders,

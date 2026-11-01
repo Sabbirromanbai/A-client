@@ -2,7 +2,7 @@
 
 **GoodTogether** is a community-driven social development platform where people can create, discover, join, and manage social service events. It helps communities work together to make a positive impact.
 
-🔗 **Live Website:** [Add Your Deployed Frontend URL]
+🔗 **Live Website:** https://a-client-beta.vercel.app
 
 ## ✨ Key Features
 
@@ -49,16 +49,27 @@ npm install
 
 ### 3. Configure environment variables
 
-Create a `.env.local` file and add the required environment variables:
+Create a `.env.local` file and add the required environment variables. Use the
+frontend origin for both Better Auth URL variables and the API origin (without
+an `/api` suffix) for `NEXT_PUBLIC_API_URL`:
 
 ```env
-NEXT_PUBLIC_API_URL=YOUR_BACKEND_API_URL
-BETTER_AUTH_SECRET=YOUR_SECRET
-BETTER_AUTH_URL=YOUR_FRONTEND_URL
+NEXT_PUBLIC_API_URL=https://a-server-eo2d.onrender.com
+NEXT_PUBLIC_BETTER_AUTH_URL=https://a-client-beta.vercel.app
+BETTER_AUTH_URL=https://a-client-beta.vercel.app
 MONGODB_URI=YOUR_MONGODB_CONNECTION_STRING
+DB_NAME=YOUR_DATABASE_NAME
+BETTER_AUTH_SECRET=YOUR_BETTER_AUTH_SECRET
+GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET=YOUR_GOOGLE_CLIENT_SECRET
 ```
 
-Use your own valid credentials and deployment URLs.
+Use the same `MONGODB_URI` and `DB_NAME` for the frontend and backend. Configure
+the Render backend with `MONGODB_URI`, `DB_NAME`,
+`BETTER_AUTH_URL=https://a-client-beta.vercel.app`, and
+`CLIENT_URL=https://a-client-beta.vercel.app`. Register
+`https://a-client-beta.vercel.app/api/auth/callback/google` as the authorized
+Google OAuth redirect URI.
 
 ### 4. Start the development server
 
