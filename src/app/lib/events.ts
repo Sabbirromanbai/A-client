@@ -82,7 +82,7 @@ function parseEvent(value: unknown): CommunityEvent | null {
 
 export async function getEvents(): Promise<CommunityEvent[]> {
   const response = await fetch(getApiUrl("api/events"), {
-    next: { revalidate: 60 },
+    cache: "no-store",
   });
 
   if (!response.ok) {
