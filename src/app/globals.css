@@ -52,10 +52,6 @@
   animation: hero-entrance 850ms 100ms ease-out both;
 }
 
-.hero-photo-image {
-  will-change: transform;
-}
-
 .hero-underline {
   animation: hero-underline-wave 7s 1.65s ease-in-out infinite;
   transform-box: fill-box;
@@ -85,7 +81,6 @@
     stroke-dashoffset: 0;
   }
 
-  .hero-photo-image,
   .hero-cta,
   .hero-cta svg {
     transition: none;

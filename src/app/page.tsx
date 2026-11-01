@@ -12,6 +12,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense, type ReactNode } from "react";
 import NewsletterForm from "@/components/NewsletterForm";
+import HeroImageSlider from "@/components/home/HeroImageSlider";
 import HeroStats from "@/components/home/HeroStats";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getApiUrl } from "./lib/api-url";
@@ -91,27 +92,14 @@ async function loadUpcomingEvents(): Promise<{
 
 function CommunityPhoto() {
   return (
-    <div className="hero-art relative mx-auto aspect-[0.94] w-full max-w-[34rem]">
+    <div className="hero-art relative mx-auto aspect-[1.1] w-full max-w-[36rem]">
       <div
         aria-hidden="true"
         className="absolute inset-[1%] rounded-[2.75rem] border border-emerald-200/70 dark:border-emerald-800/60"
       />
 
-      <div className="hero-photo group absolute inset-[6%] overflow-hidden rounded-[2rem] border border-white/80 bg-emerald-100 shadow-[0_32px_90px_-38px_rgba(16,87,57,0.42)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[2.5rem]">
-        <Image
-          alt="Volunteer taking part in a community event"
-          className="hero-photo-image object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
-          fetchPriority="high"
-          fill
-          loading="eager"
-          sizes="(max-width: 640px) 90vw, (max-width: 1024px) 70vw, 42vw"
-          src="/goodtogether-hero-v2.jpg"
-        />
-
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-t from-emerald-950/30 via-transparent to-slate-950/5 dark:from-slate-950/45"
-        />
+      <div className="hero-photo absolute inset-[6%] overflow-hidden rounded-[2rem] border border-white/80 bg-emerald-100 shadow-[0_32px_90px_-38px_rgba(16,87,57,0.42)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[2.5rem]">
+        <HeroImageSlider />
       </div>
 
       <div className="hero-badge absolute right-0 top-[13%] flex max-w-[16rem] items-center gap-2.5 rounded-2xl border border-white/80 bg-white/95 px-3.5 py-3 text-sm font-semibold leading-5 text-emerald-900 shadow-xl shadow-emerald-950/15 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95 dark:text-emerald-200 sm:-right-4 sm:px-4">
@@ -310,14 +298,14 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section className="mx-auto grid w-full max-w-7xl items-center gap-14 px-5 pb-20 pt-14 sm:px-8 sm:pb-24 sm:pt-20 lg:grid-cols-[1.02fr_0.98fr] lg:gap-10 lg:px-10 lg:py-16">
-        <div className="hero-copy relative z-10 mx-auto w-full max-w-xl text-center lg:mx-0 lg:text-left">
+      <section className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 pb-20 pt-14 sm:px-8 sm:pb-24 sm:pt-20 md:grid-cols-[1.05fr_0.95fr] md:gap-6 lg:grid-cols-[1.02fr_0.98fr] lg:gap-10 lg:px-10 lg:py-16">
+        <div className="hero-copy relative z-10 mx-auto w-full max-w-xl text-center md:mx-0 md:text-left">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200/80 bg-white/80 px-3.5 py-2 text-xs font-semibold tracking-wide text-emerald-800 shadow-sm dark:border-emerald-800/80 dark:bg-slate-900/80 dark:text-emerald-300 sm:text-sm">
             <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             GOOD THINGS HAPPEN WHEN WE SHOW UP
           </div>
 
-          <h1 className="text-balance text-[2.8rem] font-bold leading-[1.08] tracking-[-0.055em] text-slate-950 dark:text-white sm:text-6xl lg:text-[4.25rem]">
+          <h1 className="text-balance text-[2.8rem] font-bold leading-[1.08] tracking-[-0.055em] text-slate-950 dark:text-white sm:text-6xl md:text-[3.25rem] lg:text-[4.25rem]">
             Together We
             <span className="relative mt-1 inline-block pb-2 text-emerald-700 dark:text-emerald-400">
               Make Change
@@ -340,12 +328,12 @@ export default function Home() {
             </span>
           </h1>
 
-          <p className="mx-auto mt-7 max-w-lg text-pretty text-base leading-7 text-slate-600 dark:text-slate-300 sm:text-lg sm:leading-8 lg:mx-0">
+          <p className="mx-auto mt-7 max-w-lg text-pretty text-base leading-7 text-slate-600 dark:text-slate-300 sm:text-lg sm:leading-8 md:mx-0">
             Find your people, join community events, and turn a little time
             together into a lasting positive impact.
           </p>
 
-          <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
+          <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row md:flex-col md:items-start lg:flex-row lg:justify-start">
             <Link
               className="hero-cta group inline-flex min-h-14 items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-emerald-700 to-teal-600 px-7 text-base font-semibold text-white shadow-lg shadow-emerald-700/20 transition duration-300 hover:-translate-y-0.5 hover:from-emerald-600 hover:to-teal-500 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
               href="/upcoming-events"
@@ -364,7 +352,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="mt-9 flex items-center justify-center gap-3 text-left lg:justify-start">
+          <div className="mt-9 flex items-center justify-center gap-3 text-left md:justify-start">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300">
               <Heart className="h-[1.125rem] w-[1.125rem]" />
             </span>
@@ -378,7 +366,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-[36rem] px-4 pb-8 pt-2 sm:px-8 sm:pb-10 lg:px-6 lg:py-6">
+        <div className="relative mx-auto w-full max-w-[36rem] px-0 pb-8 pt-2 sm:px-8 sm:pb-10 md:px-0 lg:px-6 lg:py-6">
           <CommunityPhoto />
         </div>
       </section>
