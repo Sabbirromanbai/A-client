@@ -300,13 +300,13 @@ export default function JoinedEventsPage() {
         <div className="absolute -right-40 top-48 h-96 w-96 rounded-full bg-lime-100/50 blur-3xl dark:bg-teal-950/20" />
       </div>
 
-      <section className="mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10">
+      <section className="mx-auto w-full max-w-7xl px-5 py-10 sm:px-8 sm:py-14 lg:px-10 lg:py-16">
         <header className="mb-9 max-w-2xl sm:mb-10">
           <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.16em] text-emerald-700 dark:text-emerald-300">
             <Sparkles aria-hidden="true" className="h-4 w-4" />
             YOUR COMMUNITY COMMITMENTS
           </span>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-5xl">
+          <h1 className="mt-3 text-balance text-4xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-5xl">
             My Joined Events
           </h1>
           <p className="mt-4 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-400 sm:text-lg">
@@ -361,17 +361,17 @@ export default function JoinedEventsPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
             {joinedEvents.map(({ event, volunteerCount }) => {
               const organizerName =
                 event.organizer?.name?.trim() || "Community organizer";
 
               return (
                 <Card
-                  className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white py-0 shadow-[0_12px_36px_-26px_rgba(15,76,51,0.4)] transition duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-[0_24px_50px_-28px_rgba(15,76,51,0.34)] dark:border-slate-800 dark:bg-slate-900 dark:hover:border-emerald-900"
+                  className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-emerald-950/[0.07] bg-white py-0 shadow-[0_12px_36px_-26px_rgba(15,76,51,0.4)] transition duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-[0_24px_50px_-28px_rgba(15,76,51,0.34)] motion-reduce:transform-none dark:border-slate-800 dark:bg-slate-900 dark:hover:border-emerald-900"
                   key={event._id}
                 >
-                  <div className="relative aspect-[16/10] overflow-hidden bg-emerald-50 dark:bg-slate-800">
+                  <div className="relative aspect-[16/9] overflow-hidden bg-emerald-50 dark:bg-slate-800">
                     <EventThumbnail
                       alt={event.title}
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -440,9 +440,9 @@ export default function JoinedEventsPage() {
                     </p>
                   </CardContent>
 
-                  <CardFooter className="grid grid-cols-2 gap-2 border-t border-slate-100 bg-slate-50/70 px-5 py-4 dark:border-slate-800 dark:bg-slate-950/40 sm:px-6">
+                  <CardFooter className="grid grid-cols-2 gap-2 border-t border-emerald-950/[0.06] bg-emerald-50/35 px-5 py-4 dark:border-slate-800 dark:bg-slate-950/40 sm:px-6">
                     <Button
-                      className="h-10 min-w-0 rounded-lg bg-emerald-700 px-2 text-xs font-semibold text-white transition-colors hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 sm:px-3 sm:text-sm"
+                      className="h-10 min-w-0 rounded-full bg-emerald-700 px-2 text-xs font-semibold text-white transition-colors hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 sm:px-3 sm:text-sm"
                       nativeButton={false}
                       render={
                         <Link
@@ -454,7 +454,7 @@ export default function JoinedEventsPage() {
                       <ArrowRight aria-hidden="true" className="h-4 w-4" />
                     </Button>
                     <Button
-                      className="h-10 min-w-0 rounded-lg border border-rose-200 bg-white px-2 text-xs font-semibold text-rose-700 transition-colors hover:bg-rose-50 dark:border-rose-900 dark:bg-slate-900 dark:text-rose-300 dark:hover:bg-rose-950/40 sm:px-3 sm:text-sm"
+                      className="h-10 min-w-0 rounded-full border border-rose-200 bg-white px-2 text-xs font-semibold text-rose-700 transition-colors hover:bg-rose-50 dark:border-rose-900 dark:bg-slate-900 dark:text-rose-300 dark:hover:bg-rose-950/40 sm:px-3 sm:text-sm"
                       onClick={() => setEventToLeave(event)}
                       variant="outline"
                     >

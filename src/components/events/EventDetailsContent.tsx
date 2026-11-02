@@ -331,15 +331,15 @@ export default function EventDetailsContent({
     <main className="flex-1 bg-[#fbfdf9] dark:bg-slate-950">
       <article className="mx-auto w-full max-w-7xl px-5 py-10 sm:px-8 sm:py-14 lg:px-10">
         <Link
-          className="inline-flex items-center gap-2 rounded-lg text-sm font-semibold text-emerald-800 transition-colors hover:text-emerald-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-600 dark:text-emerald-300 dark:hover:text-emerald-200"
+          className="inline-flex min-h-10 items-center gap-2 rounded-full border border-emerald-100 bg-white/80 px-4 text-sm font-semibold text-emerald-800 shadow-sm transition-colors hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-600 dark:border-slate-800 dark:bg-slate-900/80 dark:text-emerald-300 dark:hover:border-emerald-800 dark:hover:bg-slate-900 dark:hover:text-emerald-200"
           href="/upcoming-events"
         >
           <ArrowLeft aria-hidden="true" className="h-4 w-4" />
           Back to Upcoming Events
         </Link>
 
-        <Card className="mt-6 overflow-hidden rounded-3xl border border-slate-200/80 bg-white py-0 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <div className="relative h-[24rem] overflow-hidden bg-emerald-950 sm:h-[30rem]">
+        <Card className="mt-6 overflow-hidden rounded-[1.75rem] border border-emerald-950/[0.07] bg-white py-0 shadow-[0_24px_70px_-40px_rgba(15,76,51,0.4)] dark:border-slate-800 dark:bg-slate-900">
+          <div className="relative h-[18rem] overflow-hidden bg-emerald-950 sm:h-[26rem] lg:h-[30rem]">
             <EventThumbnail
               alt={event.title}
               sizes="(max-width: 768px) 100vw, 80rem"
@@ -349,7 +349,7 @@ export default function EventDetailsContent({
               aria-hidden="true"
               className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/45 to-slate-950/5"
             />
-            <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-10 lg:p-12">
+            <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-10 lg:p-12">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-2 text-sm font-semibold text-white backdrop-blur-md">
                 <Tag aria-hidden="true" className="h-4 w-4" />
                 {event.eventType}
@@ -364,9 +364,9 @@ export default function EventDetailsContent({
             </div>
           </div>
 
-          <CardContent className="grid gap-6 p-5 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center lg:p-10">
+          <CardContent className="grid gap-6 border-t border-emerald-950/[0.05] p-5 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center lg:p-10 dark:border-slate-800">
             <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-              <div className="flex items-start gap-3">
+              <div className="flex min-w-0 items-start gap-3 rounded-xl bg-emerald-50/60 p-3 dark:bg-slate-950/60">
                 <CalendarDays
                   aria-hidden="true"
                   className="mt-0.5 h-5 w-5 shrink-0 text-emerald-700 dark:text-emerald-400"
@@ -380,7 +380,7 @@ export default function EventDetailsContent({
                   </time>
                 </div>
               </div>
-              <div className="flex items-start gap-3">
+              <div className="flex min-w-0 items-start gap-3 rounded-xl bg-emerald-50/60 p-3 dark:bg-slate-950/60">
                 <Clock3
                   aria-hidden="true"
                   className="mt-0.5 h-5 w-5 shrink-0 text-emerald-700 dark:text-emerald-400"
@@ -394,7 +394,7 @@ export default function EventDetailsContent({
                   </time>
                 </div>
               </div>
-              <div className="flex items-start gap-3">
+              <div className="flex min-w-0 items-start gap-3 rounded-xl bg-emerald-50/60 p-3 dark:bg-slate-950/60">
                 <UsersRound
                   aria-hidden="true"
                   className="mt-0.5 h-5 w-5 shrink-0 text-emerald-700 dark:text-emerald-400"
@@ -412,7 +412,7 @@ export default function EventDetailsContent({
                   </p>
                 </div>
               </div>
-              <div className="flex items-start gap-3">
+              <div className="flex min-w-0 items-start gap-3 rounded-xl bg-emerald-50/60 p-3 dark:bg-slate-950/60">
                 <MapPin
                   aria-hidden="true"
                   className="mt-0.5 h-5 w-5 shrink-0 text-emerald-700 dark:text-emerald-400"
@@ -429,7 +429,7 @@ export default function EventDetailsContent({
             </div>
 
             <Button
-              className={`h-12 w-full rounded-xl px-7 text-base font-bold shadow-md transition hover:-translate-y-0.5 disabled:translate-y-0 lg:w-auto ${
+              className={`h-12 w-full rounded-full px-7 text-base font-bold shadow-md transition hover:-translate-y-0.5 disabled:translate-y-0 lg:w-auto ${
                 hasJoined || participationStatus === "leaving"
                   ? "border border-rose-200 bg-white text-rose-700 shadow-rose-900/5 hover:border-rose-300 hover:bg-rose-50 dark:border-rose-900 dark:bg-slate-900 dark:text-rose-300 dark:hover:bg-rose-950/40"
                   : "bg-emerald-700 text-white shadow-emerald-900/15 hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500"
@@ -454,7 +454,7 @@ export default function EventDetailsContent({
         </Card>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1.4fr_0.8fr]">
-          <Card className="rounded-3xl border border-slate-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <Card className="rounded-[1.5rem] border border-emerald-950/[0.07] bg-white shadow-[0_12px_36px_-28px_rgba(15,76,51,0.42)] dark:border-slate-800 dark:bg-slate-900">
             <CardHeader>
               <CardTitle className="text-xl font-bold text-slate-950 dark:text-white">
                 About this Social Initiative
@@ -467,7 +467,7 @@ export default function EventDetailsContent({
             </CardContent>
           </Card>
 
-          <Card className="rounded-3xl border border-slate-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <Card className="rounded-[1.5rem] border border-emerald-950/[0.07] bg-white shadow-[0_12px_36px_-28px_rgba(15,76,51,0.42)] dark:border-slate-800 dark:bg-slate-900">
             <CardHeader>
               <CardTitle className="text-xl font-bold text-slate-950 dark:text-white">
                 Volunteer Guidelines
@@ -492,7 +492,7 @@ export default function EventDetailsContent({
         </div>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[0.8fr_1.4fr]">
-          <Card className="rounded-3xl border border-slate-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <Card className="rounded-[1.5rem] border border-emerald-950/[0.07] bg-white shadow-[0_12px_36px_-28px_rgba(15,76,51,0.42)] dark:border-slate-800 dark:bg-slate-900">
             <CardHeader>
               <CardTitle className="text-xl font-bold text-slate-950 dark:text-white">
                 Initiative Organizer
@@ -524,7 +524,7 @@ export default function EventDetailsContent({
             </CardContent>
           </Card>
 
-          <Card className="rounded-3xl border border-slate-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <Card className="rounded-[1.5rem] border border-emerald-950/[0.07] bg-white shadow-[0_12px_36px_-28px_rgba(15,76,51,0.42)] dark:border-slate-800 dark:bg-slate-900">
             <CardHeader className="flex flex-row items-center justify-between gap-4">
               <CardTitle className="text-xl font-bold text-slate-950 dark:text-white">
                 Confirmed Volunteers

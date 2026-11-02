@@ -263,7 +263,7 @@ export default function CreateEventPage() {
         <div className="absolute -right-48 top-64 h-[32rem] w-[32rem] rounded-full bg-lime-100/45 blur-3xl dark:bg-teal-950/25" />
       </div>
 
-      <section className="mx-auto w-full max-w-7xl px-5 py-9 sm:px-8 sm:py-12 lg:px-10 lg:py-14">
+      <section className="mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 sm:py-12 lg:px-10 lg:py-14">
         <Link
           className="group inline-flex items-center gap-2 rounded-lg text-sm font-semibold text-emerald-800 transition-colors hover:text-emerald-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-600 dark:text-emerald-300 dark:hover:text-emerald-200"
           href="/upcoming-events"
@@ -275,12 +275,12 @@ export default function CreateEventPage() {
           Back to Upcoming Events
         </Link>
 
-        <header className="mx-auto mb-8 mt-8 max-w-3xl text-center sm:mb-10">
+        <header className="mx-auto mb-7 mt-7 max-w-3xl text-center sm:mb-10 sm:mt-8">
           <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200/80 bg-white/75 px-4 py-2 text-xs font-bold tracking-[0.14em] text-emerald-800 shadow-sm backdrop-blur dark:border-emerald-800/80 dark:bg-slate-900/70 dark:text-emerald-300">
             <HandHeart aria-hidden="true" className="h-4 w-4" />
             SOCIAL SERVICE DRIVE
           </span>
-          <h1 className="mt-5 text-4xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-5xl">
+          <h1 className="mt-5 text-balance text-4xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-5xl">
             Create a Community Event
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-400 sm:text-lg">
@@ -289,9 +289,9 @@ export default function CreateEventPage() {
           </p>
         </header>
 
-        <div className="mx-auto grid max-w-6xl items-start gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.65fr)]">
-          <Card className="overflow-hidden rounded-3xl border border-white/80 bg-white/90 py-0 shadow-[0_24px_80px_-40px_rgba(4,120,87,0.32)] ring-1 ring-emerald-950/5 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/90 dark:ring-white/5">
-            <CardHeader className="border-b border-slate-100 px-6 py-6 dark:border-slate-800 sm:px-8">
+        <div className="mx-auto grid max-w-6xl items-start gap-5 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.65fr)] lg:gap-6">
+          <Card className="overflow-hidden rounded-[1.5rem] border border-emerald-950/[0.07] bg-white/95 py-0 shadow-[0_24px_70px_-40px_rgba(4,120,87,0.34)] ring-1 ring-emerald-950/5 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/95 dark:ring-white/5">
+            <CardHeader className="border-b border-emerald-950/[0.06] px-5 py-5 dark:border-slate-800 sm:px-8 sm:py-6">
               <CardTitle className="text-xl font-bold text-slate-950 dark:text-white">
                 Event details
               </CardTitle>
@@ -300,7 +300,7 @@ export default function CreateEventPage() {
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="px-6 py-6 sm:px-8 sm:py-8">
+            <CardContent className="px-5 py-5 sm:px-8 sm:py-8">
               <form
                 className="space-y-7"
                 noValidate
@@ -342,7 +342,7 @@ export default function CreateEventPage() {
                       const selected = eventType === name;
                       return (
                         <label
-                          className={`group relative flex min-h-20 cursor-pointer items-center gap-3 rounded-xl border px-3 py-3 transition duration-200 hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-emerald-50/60 focus-within:ring-2 focus-within:ring-emerald-500/30 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/30 ${
+                          className={`group relative flex min-h-20 cursor-pointer items-center gap-2.5 rounded-xl border px-2.5 py-3 transition duration-200 hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-emerald-50/60 focus-within:ring-2 focus-within:ring-emerald-500/30 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/30 sm:gap-3 sm:px-3 ${
                             selected
                               ? "border-emerald-600 bg-emerald-50 shadow-sm shadow-emerald-900/5 dark:border-emerald-500 dark:bg-emerald-950/50"
                               : errors.eventType

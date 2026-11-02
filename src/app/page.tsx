@@ -184,19 +184,19 @@ async function loadUpcomingEvents(): Promise<{
 
 function CommunityPhoto() {
   return (
-    <div className="hero-art relative mx-auto aspect-[1.1] w-full max-w-[36rem]">
+    <div className="hero-art relative mx-auto aspect-[1.38] w-full sm:aspect-[1.55] lg:aspect-auto lg:h-[30rem] lg:min-h-0">
       <div
         aria-hidden="true"
-        className="absolute inset-[1%] rounded-[2.75rem] border border-emerald-200/70 dark:border-emerald-800/60"
+        className="absolute inset-[3%] rounded-[1.75rem] border border-emerald-300/65 dark:border-emerald-800/60 sm:rounded-[2rem]"
       />
 
-      <div className="hero-photo absolute inset-[6%] overflow-hidden rounded-[2rem] border border-white/80 bg-emerald-100 shadow-[0_32px_90px_-38px_rgba(16,87,57,0.42)] dark:border-slate-700 dark:bg-slate-900 sm:rounded-[2.5rem]">
+      <div className="hero-photo absolute inset-0 overflow-hidden rounded-[1.5rem] border border-white/90 bg-emerald-100 shadow-[0_32px_90px_-38px_rgba(16,87,57,0.42)] dark:border-emerald-900/80 dark:bg-slate-900 sm:rounded-[2rem]">
         <HeroImageSlider />
       </div>
 
-      <div className="hero-badge absolute right-0 top-[13%] flex max-w-[16rem] items-center gap-2.5 rounded-2xl border border-white/80 bg-white/95 px-3.5 py-3 text-sm font-semibold leading-5 text-emerald-900 shadow-xl shadow-emerald-950/15 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95 dark:text-emerald-200 sm:-right-4 sm:px-4">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/70 dark:text-emerald-300">
-          <Sparkles className="h-[1.125rem] w-[1.125rem]" />
+      <div className="hero-badge absolute right-3 top-3 flex max-w-[13rem] items-center gap-2 rounded-xl border border-white/80 bg-white/95 px-3 py-2 text-xs font-semibold leading-4 text-emerald-900 shadow-lg shadow-emerald-950/10 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95 dark:text-emerald-200 sm:right-5 sm:top-5">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700 dark:bg-emerald-900/70 dark:text-emerald-300">
+          <Sparkles className="h-4 w-4" />
         </span>
         Making an Impact Together
       </div>
@@ -206,8 +206,8 @@ function CommunityPhoto() {
 
 function EventCard({ event }: { event: Event }) {
   return (
-    <article className="group overflow-hidden rounded-3xl border border-slate-200/80 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-900/10 dark:border-slate-800 dark:bg-slate-900">
-      <div className="relative h-52 overflow-hidden bg-emerald-50 dark:bg-slate-800">
+    <article className="group overflow-hidden rounded-[1.4rem] border border-emerald-950/[0.07] bg-white shadow-[0_12px_36px_-26px_rgba(15,76,51,0.38)] transition duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-900/10 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-emerald-900">
+      <div className="relative aspect-[16/9] overflow-hidden bg-emerald-50 dark:bg-slate-800">
         {event.thumbnailUrl ? (
           <Image
             src={event.thumbnailUrl}
@@ -228,8 +228,8 @@ function EventCard({ event }: { event: Event }) {
         </span>
       </div>
 
-      <div className="p-6">
-        <h3 className="line-clamp-1 text-xl font-bold text-slate-900 dark:text-white">
+      <div className="p-5 sm:p-6">
+        <h3 className="line-clamp-1 text-lg font-bold tracking-tight text-slate-900 dark:text-white sm:text-xl">
           {event.title}
         </h3>
 
@@ -292,7 +292,7 @@ function UpcomingEventsHeading() {
 
 function UpcomingEventsSection({ children }: { children: ReactNode }) {
   return (
-    <section className="bg-white px-5 py-20 dark:bg-slate-950 sm:px-8 lg:px-10">
+    <section className="bg-white px-5 py-16 dark:bg-slate-950 sm:px-8 sm:py-20 lg:px-10">
       <div className="mx-auto max-w-7xl">
         <UpcomingEventsHeading />
         {children}
@@ -390,15 +390,24 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 pb-20 pt-14 sm:px-8 sm:pb-24 sm:pt-20 md:grid-cols-[1.05fr_0.95fr] md:gap-6 lg:grid-cols-[1.02fr_0.98fr] lg:gap-10 lg:px-10 lg:py-16">
-        <div className="hero-copy relative z-10 mx-auto w-full max-w-xl text-center md:mx-0 md:text-left">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200/80 bg-white/80 px-3.5 py-2 text-xs font-semibold tracking-wide text-emerald-800 shadow-sm dark:border-emerald-800/80 dark:bg-slate-900/80 dark:text-emerald-300 sm:text-sm">
+      <section className="hero-stage relative isolate grid w-full overflow-hidden border-b border-emerald-100/70 bg-gradient-to-br from-[#f7faf6] via-[#fbfcf8] to-[#edf6ef] dark:border-emerald-950 dark:from-[#071b14] dark:via-[#0b1c16] dark:to-[#10291f] lg:min-h-[35rem] lg:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+        >
+          <div className="absolute -left-36 -top-40 h-[28rem] w-[28rem] rounded-full bg-emerald-200/25 blur-3xl dark:bg-emerald-500/10" />
+          <div className="absolute -bottom-48 left-[30%] h-80 w-80 rounded-full bg-teal-100/35 blur-3xl dark:bg-teal-900/15" />
+          <div className="absolute -right-36 -top-40 h-[34rem] w-[34rem] rounded-full bg-emerald-300/15 blur-3xl dark:bg-emerald-700/15" />
+        </div>
+
+        <div className="hero-copy relative z-10 mx-auto flex w-full max-w-[43rem] flex-col justify-center px-5 pb-7 pt-10 text-center sm:px-8 sm:pb-9 sm:pt-12 lg:mx-0 lg:px-12 lg:py-12 lg:text-left xl:px-16">
+          <div className="mb-6 inline-flex self-center items-center gap-2 rounded-full border border-emerald-200/80 bg-white/80 px-3.5 py-2 text-xs font-semibold tracking-wide text-emerald-800 shadow-sm shadow-emerald-950/[0.04] backdrop-blur dark:border-emerald-800/80 dark:bg-slate-900/75 dark:text-emerald-300 sm:text-sm lg:self-start">
             <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             GOOD THINGS HAPPEN WHEN WE SHOW UP
           </div>
 
-          <h1 className="text-balance text-[2.8rem] font-bold leading-[1.08] tracking-[-0.055em] text-slate-950 dark:text-white sm:text-6xl md:text-[3.25rem] lg:text-[4.25rem]">
-            Together We
+          <h1 className="text-balance text-[clamp(2.85rem,5.2vw,4.5rem)] font-extrabold leading-[1.02] tracking-[-0.055em] text-slate-950 dark:text-white">
+            <span className="block">Together We</span>
             <span className="relative mt-1 inline-block pb-2 text-emerald-700 dark:text-emerald-400">
               Make Change
               <span className="text-slate-950 dark:text-white">.</span>
@@ -420,14 +429,14 @@ export default function Home() {
             </span>
           </h1>
 
-          <p className="mx-auto mt-7 max-w-lg text-pretty text-base leading-7 text-slate-600 dark:text-slate-300 sm:text-lg sm:leading-8 md:mx-0">
+          <p className="mx-auto mt-6 max-w-[30rem] text-pretty text-base leading-7 text-slate-600 dark:text-slate-300 sm:text-lg sm:leading-8 lg:mx-0">
             Find your people, join community events, and turn a little time
             together into a lasting positive impact.
           </p>
 
-          <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row md:flex-col md:items-start lg:flex-row lg:justify-start">
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:items-start lg:justify-start">
             <Link
-              className="hero-cta group inline-flex min-h-14 items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-emerald-700 to-teal-600 px-7 text-base font-semibold text-white shadow-lg shadow-emerald-700/20 transition duration-300 hover:-translate-y-0.5 hover:from-emerald-600 hover:to-teal-500 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
+              className="hero-cta group inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-emerald-700 to-teal-600 px-6 text-sm font-semibold text-white shadow-lg shadow-emerald-700/20 transition duration-300 hover:-translate-y-0.5 hover:from-emerald-600 hover:to-teal-500 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950 sm:min-h-14 sm:px-7 sm:text-base"
               href="/upcoming-events"
             >
               <CalendarDays className="h-[1.125rem] w-[1.125rem]" />
@@ -436,7 +445,7 @@ export default function Home() {
             </Link>
 
             <Link
-              className="hero-cta inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-emerald-200 bg-white/75 px-7 text-base font-semibold text-emerald-800 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-emerald-50 dark:border-slate-700 dark:bg-slate-900/75 dark:text-emerald-300 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/50"
+              className="hero-cta inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-emerald-200 bg-white/75 px-6 text-sm font-semibold text-emerald-800 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-emerald-50 dark:border-slate-700 dark:bg-slate-900/75 dark:text-emerald-300 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/50 sm:min-h-14 sm:px-7 sm:text-base"
               href="/create-event"
             >
               <UsersRound className="h-[1.125rem] w-[1.125rem]" />
@@ -444,8 +453,8 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="mt-9 flex items-center justify-center gap-3 text-left md:justify-start">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300">
+          <div className="mt-8 flex items-center justify-center gap-3 text-left lg:justify-start">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100/80 text-emerald-700 ring-1 ring-emerald-200/80 dark:bg-emerald-900/60 dark:text-emerald-300 dark:ring-emerald-800">
               <Heart className="h-[1.125rem] w-[1.125rem]" />
             </span>
 
@@ -458,7 +467,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-[36rem] px-0 pb-8 pt-2 sm:px-8 sm:pb-10 md:px-0 lg:px-6 lg:py-6">
+        <div className="relative w-full px-3 pb-7 sm:px-8 sm:pb-9 lg:px-8 lg:py-10 xl:px-10">
           <CommunityPhoto />
         </div>
       </section>
@@ -470,9 +479,9 @@ export default function Home() {
       </Suspense>
 
       {/* Why GoodTogether Section */}
-      <section className="relative overflow-hidden bg-[#f5faf6] px-5 py-24 dark:bg-slate-900/60 sm:px-8 lg:px-10">
+      <section className="relative overflow-hidden bg-gradient-to-b from-emerald-50/80 to-white px-5 py-16 dark:from-slate-900 dark:to-slate-950 sm:px-8 sm:py-20 lg:px-10 lg:py-24">
         <div className="mx-auto max-w-7xl">
-          <div className="mx-auto mb-14 max-w-2xl text-center">
+          <div className="mx-auto mb-10 max-w-2xl text-center sm:mb-14">
             <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-4 py-2 text-xs font-bold uppercase tracking-widest text-emerald-700 dark:border-emerald-800 dark:bg-slate-900 dark:text-emerald-400">
               <Sparkles className="h-4 w-4" />
               Why GoodTogether
@@ -489,7 +498,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
             {[
               {
                 icon: CalendarDays,
@@ -525,11 +534,11 @@ export default function Home() {
               return (
                 <div
                   key={feature.number}
-                  className="group relative rounded-3xl border border-emerald-100 bg-white p-7 transition-all duration-300 hover:-translate-y-2 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-900/10 dark:border-slate-800 dark:bg-slate-950 dark:hover:border-emerald-800"
+                  className="group relative flex h-full flex-col rounded-[1.5rem] border border-emerald-950/[0.07] bg-white p-5 shadow-[0_12px_36px_-28px_rgba(15,76,51,0.42)] transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-900/10 motion-reduce:transform-none dark:border-slate-800 dark:bg-slate-950 dark:hover:border-emerald-800 sm:p-6"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 transition-colors duration-300 group-hover:bg-emerald-600 group-hover:text-white dark:bg-emerald-950 dark:text-emerald-400">
-                      <Icon className="h-7 w-7" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100 transition duration-300 group-hover:scale-105 group-hover:bg-emerald-700 group-hover:text-white dark:bg-emerald-950 dark:text-emerald-300 dark:ring-emerald-900">
+                      <Icon aria-hidden="true" className="h-6 w-6" />
                     </div>
 
                     <span className="text-sm font-bold tracking-widest text-emerald-200 dark:text-emerald-900">
@@ -537,15 +546,15 @@ export default function Home() {
                     </span>
                   </div>
 
-                  <h3 className="mt-7 text-xl font-bold text-slate-900 dark:text-white">
+                  <h3 className="mt-6 text-lg font-bold tracking-tight text-slate-900 dark:text-white sm:text-xl">
                     {feature.title}
                   </h3>
 
-                  <p className="mt-3 text-sm leading-7 text-slate-500 dark:text-slate-400">
+                  <p className="mt-2 flex-1 text-sm leading-6 text-slate-600 dark:text-slate-400">
                     {feature.description}
                   </p>
 
-                  <div className="mt-6 h-1 w-10 rounded-full bg-emerald-500 transition-all duration-300 group-hover:w-20" />
+                  <div className="mt-5 h-1 w-9 rounded-full bg-emerald-500 transition-all duration-300 group-hover:w-16 motion-reduce:transition-none" />
                 </div>
               );
             })}
@@ -554,9 +563,9 @@ export default function Home() {
       </section>
 
       {/* Community Gallery Section */}
-      <section className="bg-white px-5 py-24 dark:bg-slate-950 sm:px-8 lg:px-10">
+      <section className="bg-white px-5 py-16 dark:bg-slate-950 sm:px-8 sm:py-20 lg:px-10 lg:py-24">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-12 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+          <div className="mb-9 flex flex-col justify-between gap-5 sm:mb-12 sm:flex-row sm:items-end">
             <div>
               <span className="text-sm font-bold uppercase tracking-widest text-emerald-600">
                 Our Community
@@ -588,12 +597,12 @@ export default function Home() {
               return (
                 <article
                   key={photo.title}
-                  className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm shadow-slate-900/[0.03] transition duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-900/10 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-emerald-900"
+                  className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-emerald-950/[0.07] bg-white shadow-[0_12px_36px_-26px_rgba(15,76,51,0.38)] transition duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-900/10 motion-reduce:transform-none dark:border-slate-800 dark:bg-slate-900 dark:hover:border-emerald-900"
                 >
-                  <div className="relative aspect-[16/10] overflow-hidden bg-emerald-50 dark:bg-slate-800">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-emerald-50 dark:bg-slate-800 sm:aspect-[16/10]">
                     <Image
                       alt={photo.alt}
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
                       fill
                       sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
                       src={photo.image}
@@ -642,12 +651,12 @@ export default function Home() {
       </section>
 
       {/* Newsletter Section */}
-      <section className="bg-white px-5 pb-24 pt-10 dark:bg-slate-950 sm:px-8 lg:px-10">
-        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-700 via-emerald-800 to-teal-900 px-6 py-16 text-center shadow-2xl shadow-emerald-900/15 sm:px-12 lg:py-20">
+      <section className="bg-white px-5 pb-16 pt-4 dark:bg-slate-950 sm:px-8 sm:pb-20 lg:px-10 lg:pb-24">
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[1.75rem] border border-emerald-900/10 bg-gradient-to-br from-emerald-800 via-emerald-900 to-teal-950 px-5 py-12 text-center shadow-[0_28px_80px_-40px_rgba(4,70,49,0.65)] sm:rounded-[2rem] sm:px-12 sm:py-16 lg:py-20">
           {/* Background Decorations */}
-          <div className="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full border border-white/10" />
-          <div className="pointer-events-none absolute -bottom-32 -right-20 h-80 w-80 rounded-full border border-white/10" />
-          <div className="pointer-events-none absolute right-20 top-10 h-32 w-32 rounded-full bg-emerald-400/10 blur-3xl" />
+          <div className="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full border border-white/10 sm:h-72 sm:w-72" />
+          <div className="pointer-events-none absolute -bottom-32 -right-20 h-72 w-72 rounded-full border border-white/10 sm:h-80 sm:w-80" />
+          <div className="pointer-events-none absolute right-[10%] top-8 h-32 w-32 rounded-full bg-emerald-300/10 blur-3xl" />
 
           <div className="relative mx-auto max-w-2xl">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-emerald-100 backdrop-blur">
@@ -655,7 +664,7 @@ export default function Home() {
               Stay Connected
             </span>
 
-            <h2 className="mt-6 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+            <h2 className="mt-5 text-balance text-3xl font-bold tracking-tight text-white sm:mt-6 sm:text-5xl">
               Be Part of Something{" "}
               <span className="text-emerald-300">Good.</span>
             </h2>

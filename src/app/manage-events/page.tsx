@@ -367,14 +367,14 @@ export default function ManageEventsPage() {
         <div className="absolute -right-40 top-48 h-96 w-96 rounded-full bg-lime-100/50 blur-3xl dark:bg-teal-950/20" />
       </div>
 
-      <section className="mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10">
-        <header className="mb-9 flex flex-col justify-between gap-5 sm:mb-10 sm:flex-row sm:items-end">
+      <section className="mx-auto w-full max-w-7xl px-5 py-10 sm:px-8 sm:py-14 lg:px-10 lg:py-16">
+        <header className="mb-8 flex flex-col justify-between gap-5 sm:mb-10 sm:flex-row sm:items-end">
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.16em] text-emerald-700 dark:text-emerald-300">
               <CalendarDays aria-hidden="true" className="h-4 w-4" />
               YOUR COMMUNITY WORK
             </span>
-            <h1 className="mt-3 text-4xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-5xl">
+            <h1 className="mt-3 text-balance text-4xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-5xl">
               Manage My Events
             </h1>
             <p className="mt-4 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-400 sm:text-lg">
@@ -383,7 +383,7 @@ export default function ManageEventsPage() {
             </p>
           </div>
           <Button
-            className="h-11 rounded-xl bg-emerald-700 px-5 text-sm font-semibold text-white hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500"
+            className="h-11 rounded-full bg-emerald-700 px-5 text-sm font-semibold text-white shadow-sm shadow-emerald-900/10 transition hover:-translate-y-0.5 hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500"
             nativeButton={false}
             render={<Link href="/create-event" />}
           >
@@ -440,8 +440,8 @@ export default function ManageEventsPage() {
             </CardContent>
           </Card>
         ) : (
-          <Card className="overflow-hidden rounded-3xl border-slate-200/80 bg-white/90 py-0 shadow-sm dark:border-slate-800 dark:bg-slate-900/90">
-            <CardHeader className="border-b border-slate-100 px-5 py-5 dark:border-slate-800 sm:px-6">
+          <Card className="overflow-hidden rounded-[1.5rem] border border-emerald-950/[0.07] bg-white/95 py-0 shadow-[0_18px_50px_-36px_rgba(15,76,51,0.45)] dark:border-slate-800 dark:bg-slate-900/95">
+            <CardHeader className="border-b border-emerald-950/[0.06] bg-emerald-50/35 px-5 py-5 dark:border-slate-800 dark:bg-slate-950/30 sm:px-6">
               <CardTitle className="text-lg font-bold text-slate-950 dark:text-white">
                 Your events
               </CardTitle>

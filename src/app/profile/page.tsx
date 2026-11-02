@@ -416,7 +416,7 @@ export default function ProfilePage() {
         <div className="absolute -right-36 top-96 h-96 w-96 rounded-full bg-lime-100/50 blur-3xl dark:bg-teal-950/20" />
       </div>
 
-      <section className="mx-auto w-full max-w-7xl space-y-8 px-5 py-10 sm:px-8 sm:py-14 lg:px-10">
+      <section className="mx-auto w-full max-w-7xl space-y-6 px-5 py-9 sm:space-y-8 sm:px-8 sm:py-14 lg:px-10">
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.16em] text-emerald-700 dark:text-emerald-300">
@@ -433,18 +433,18 @@ export default function ProfilePage() {
           </p>
         </header>
 
-        <Card className="relative overflow-hidden rounded-[2rem] border-emerald-100/80 bg-white/90 py-0 shadow-[0_28px_90px_-50px_rgba(15,76,51,0.44)] dark:border-slate-800 dark:bg-slate-900/90">
+        <Card className="relative overflow-hidden rounded-[1.75rem] border border-emerald-950/[0.07] bg-white/95 py-0 shadow-[0_28px_90px_-50px_rgba(15,76,51,0.44)] dark:border-slate-800 dark:bg-slate-900/95 sm:rounded-[2rem]">
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 top-0 h-36 overflow-hidden bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-600 sm:h-40"
+            className="absolute inset-x-0 top-0 h-32 overflow-hidden bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-600 sm:h-40"
           >
             <div className="absolute -right-8 -top-28 h-72 w-72 rounded-full border border-white/15" />
             <div className="absolute -right-1 top-[-5.5rem] h-72 w-72 rounded-full border border-white/10" />
             <div className="absolute -bottom-28 left-[45%] h-56 w-56 rounded-full bg-lime-300/10 blur-2xl" />
           </div>
-          <CardContent className="relative grid gap-6 px-5 pb-6 pt-20 sm:px-8 sm:pb-8 sm:pt-24 lg:grid-cols-[1fr_auto] lg:items-end">
+          <CardContent className="relative grid gap-5 px-5 pb-6 pt-16 sm:gap-6 sm:px-8 sm:pb-8 sm:pt-24 lg:grid-cols-[1fr_auto] lg:items-end">
             <div className="flex min-w-0 flex-col gap-5 sm:flex-row sm:items-end">
-              <Avatar className="h-28 w-28 shrink-0 rounded-[2rem] border-4 border-white bg-white shadow-xl dark:border-slate-900 dark:bg-slate-900 sm:h-32 sm:w-32">
+              <Avatar className="h-24 w-24 shrink-0 rounded-[1.75rem] border-4 border-white bg-white shadow-xl dark:border-slate-900 dark:bg-slate-900 sm:h-32 sm:w-32 sm:rounded-[2rem]">
                 <AvatarImage
                   alt={`${displayName}'s profile photo`}
                   className="rounded-[1.65rem]"
@@ -479,7 +479,7 @@ export default function ProfilePage() {
               </div>
             </div>
             <Button
-              className="h-11 w-full rounded-xl border-emerald-200 bg-white/80 font-semibold text-emerald-800 shadow-sm transition hover:-translate-y-0.5 hover:bg-emerald-50 dark:border-slate-700 dark:bg-slate-800 dark:text-emerald-200 dark:hover:bg-slate-800/80 sm:w-auto"
+              className="h-11 w-full rounded-full border-emerald-200 bg-white/90 font-semibold text-emerald-800 shadow-sm transition hover:-translate-y-0.5 hover:bg-emerald-50 dark:border-slate-700 dark:bg-slate-800 dark:text-emerald-200 dark:hover:bg-slate-800/80 sm:w-auto"
               onClick={openEditProfile}
               variant="outline"
             >

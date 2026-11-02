@@ -82,8 +82,8 @@ function EventCard({ event }: { event: CommunityEvent }) {
     "Community organizer";
 
   return (
-    <Card className="h-full rounded-2xl border border-slate-200/80 bg-white py-0 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-emerald-950/10 dark:border-slate-800 dark:bg-slate-900">
-      <div className="relative aspect-[16/10] overflow-hidden bg-emerald-50 dark:bg-slate-800">
+    <Card className="h-full rounded-[1.4rem] border border-emerald-950/[0.07] bg-white py-0 shadow-[0_12px_36px_-26px_rgba(15,76,51,0.38)] transition duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-950/10 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-emerald-900">
+      <div className="relative aspect-[16/9] overflow-hidden bg-emerald-50 dark:bg-slate-800">
         <EventThumbnail
           alt={event.title}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -99,7 +99,7 @@ function EventCard({ event }: { event: CommunityEvent }) {
       </div>
 
       <CardHeader className="px-5 pt-5 sm:px-6">
-        <CardTitle className="line-clamp-1 text-xl font-bold text-slate-900 dark:text-white">
+        <CardTitle className="line-clamp-1 text-lg font-bold tracking-tight text-slate-900 dark:text-white sm:text-xl">
           {event.title}
         </CardTitle>
         <p className="line-clamp-3 min-h-[4.5rem] text-sm leading-6 text-slate-600 dark:text-slate-400">
@@ -131,9 +131,9 @@ function EventCard({ event }: { event: CommunityEvent }) {
         </p>
       </CardContent>
 
-      <CardFooter className="border-t border-slate-100 bg-slate-50/70 px-5 py-4 dark:border-slate-800 dark:bg-slate-950/40 sm:px-6">
+      <CardFooter className="border-t border-emerald-950/[0.06] bg-emerald-50/35 px-5 py-4 dark:border-slate-800 dark:bg-slate-950/40 sm:px-6">
         <Link
-          className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-emerald-700 px-4 text-sm font-semibold text-white transition-colors hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-500"
+          className="flex h-10 w-full items-center justify-center gap-2 rounded-full bg-emerald-700 px-4 text-sm font-semibold text-white transition-colors hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-500"
           href={`/event-details/${encodeURIComponent(event._id)}`}
         >
           View Event
@@ -198,14 +198,14 @@ export default function UpcomingEventsBrowser({
   }
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10">
-      <header className="mb-9 flex flex-col justify-between gap-6 sm:mb-10 sm:flex-row sm:items-end">
+    <section className="mx-auto w-full max-w-7xl px-5 py-10 sm:px-8 sm:py-14 lg:px-10 lg:py-16">
+      <header className="mb-8 flex flex-col justify-between gap-5 sm:mb-10 sm:flex-row sm:items-end">
         <div className="max-w-2xl">
           <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.16em] text-emerald-700 dark:text-emerald-300">
             <Sparkles aria-hidden="true" className="h-4 w-4" />
             FUTURE COMMUNITY DRIVES
           </span>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-5xl">
+          <h1 className="mt-3 text-balance text-4xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-5xl">
             Upcoming Events
           </h1>
           <p className="mt-4 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-400 sm:text-lg">
@@ -216,7 +216,7 @@ export default function UpcomingEventsBrowser({
 
         <Link
           aria-disabled={isPending}
-          className={`inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-emerald-700 px-5 text-sm font-semibold text-white transition-colors hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-500 ${
+          className={`inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-emerald-700 px-5 text-sm font-semibold text-white shadow-sm shadow-emerald-900/10 transition duration-200 hover:-translate-y-0.5 hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-500 ${
             isPending ? "cursor-wait opacity-70" : ""
           }`}
           href="/create-event"
@@ -227,7 +227,7 @@ export default function UpcomingEventsBrowser({
         </Link>
       </header>
 
-      <div className="mb-8 rounded-2xl border border-slate-200/80 bg-white/90 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/80 sm:p-5">
+      <div className="mb-8 rounded-2xl border border-emerald-950/[0.07] bg-white/90 p-4 shadow-[0_10px_30px_-24px_rgba(15,76,51,0.35)] dark:border-slate-800 dark:bg-slate-900/80 sm:p-5">
         <div className="relative max-w-xl">
           <Search
             aria-hidden="true"
@@ -235,7 +235,7 @@ export default function UpcomingEventsBrowser({
           />
           <Input
             aria-label="Search events"
-            className="h-11 rounded-lg border-slate-200 bg-slate-50 pl-10 pr-10 text-sm dark:border-slate-700 dark:bg-slate-950"
+            className="h-11 rounded-xl border-slate-200 bg-slate-50 pl-10 pr-10 text-sm focus-visible:ring-emerald-600/20 dark:border-slate-700 dark:bg-slate-950"
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search by event, location, category..."
             type="text"

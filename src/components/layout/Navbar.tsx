@@ -161,16 +161,16 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
+    <header className="sticky top-0 z-50 px-3 pt-2 sm:px-5 sm:pt-3">
       <div
-        className={`relative mx-auto max-w-7xl rounded-[1.4rem] border backdrop-blur-2xl transition-[background-color,border-color,box-shadow,transform] duration-300 ease-out ${
+        className={`relative mx-auto max-w-7xl rounded-2xl border backdrop-blur-2xl transition-[background-color,border-color,box-shadow,transform] duration-300 ease-out ${
           isScrolled
             ? "translate-y-0 border-emerald-200/75 bg-white/90 shadow-[0_14px_40px_-20px_rgba(15,76,51,0.42)] dark:border-slate-700/80 dark:bg-slate-950/90 dark:shadow-black/40"
             : "border-white/75 bg-white/72 shadow-[0_10px_36px_-22px_rgba(15,76,51,0.3)] dark:border-slate-700/70 dark:bg-slate-950/72 dark:shadow-black/25"
         }`}
         ref={headerRef}
       >
-        <div className="grid min-h-[4.25rem] grid-cols-[1fr_auto] items-center gap-1 px-2 py-2 sm:min-h-[4.75rem] sm:gap-3 sm:px-5 md:grid-cols-[1fr_auto_1fr]">
+        <div className="grid min-h-[4rem] grid-cols-[1fr_auto] items-center gap-1 px-2 py-1.5 sm:min-h-[4.5rem] sm:gap-3 sm:px-5 md:grid-cols-[1fr_auto_1fr]">
           <Link
             aria-label="GoodTogether home"
             className="group min-w-0 shrink-0 justify-self-start rounded-xl outline-none transition-opacity duration-200 hover:opacity-85 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"

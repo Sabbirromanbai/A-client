@@ -133,14 +133,14 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f0fdf7] px-4 py-8 text-slate-900 transition-colors duration-500 dark:bg-[#06140f] dark:text-slate-100 sm:px-6 lg:py-12">
+    <main className="relative flex min-h-[calc(100vh-8rem)] items-center justify-center overflow-hidden bg-[#f0fdf7] px-4 py-8 text-slate-900 transition-colors duration-500 dark:bg-[#06140f] dark:text-slate-100 sm:px-6 lg:py-12">
 
       {/* Ambient background */}
       <div className="pointer-events-none absolute -left-32 -top-32 h-[30rem] w-[30rem] rounded-full bg-emerald-300/30 blur-[110px] dark:bg-emerald-700/15" />
       <div className="pointer-events-none absolute -bottom-40 -right-32 h-[32rem] w-[32rem] rounded-full bg-lime-300/30 blur-[120px] dark:bg-lime-700/10" />
 
       {/* Main Card */}
-      <section className="relative grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/80 bg-white/80 shadow-[0_30px_100px_-30px_rgba(4,120,87,0.25)] backdrop-blur-2xl transition-colors duration-500 dark:border-white/10 dark:bg-slate-900/80 dark:shadow-black/40 lg:grid-cols-[0.9fr_1.1fr]">
+      <section className="relative grid w-full max-w-5xl overflow-hidden rounded-[1.75rem] border border-white/85 bg-white/85 shadow-[0_30px_100px_-30px_rgba(4,120,87,0.28)] backdrop-blur-2xl transition-colors duration-500 dark:border-white/10 dark:bg-slate-900/85 dark:shadow-black/40 lg:grid-cols-[0.9fr_1.1fr]">
 
         {/* Left Panel */}
         <div className="relative hidden min-h-[650px] flex-col justify-between overflow-hidden bg-gradient-to-br from-[#047857] via-[#065f46] to-[#022c22] p-10 text-white lg:flex xl:p-14">
@@ -159,7 +159,7 @@ export default function LoginPage() {
               <BrandLogo inverse />
             </Link>
 
-            <div className="mt-24 max-w-sm">
+            <div className="mt-16 max-w-sm xl:mt-24">
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold tracking-wide text-emerald-100 backdrop-blur-xl">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-lime-300" />
                 BETTER TOGETHER
@@ -218,7 +218,7 @@ export default function LoginPage() {
 
           {/* Google Login */}
           <button
-            className="group flex w-full items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white/80 px-4 py-4 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-emerald-50 hover:shadow-lg hover:shadow-emerald-900/5 focus:outline-none focus:ring-4 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950/50 dark:text-slate-200 dark:hover:border-emerald-700 dark:hover:bg-slate-800"
+            className="group flex min-h-12 w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white/80 px-4 py-3.5 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-emerald-50 hover:shadow-lg hover:shadow-emerald-900/5 focus:outline-none focus:ring-4 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950/50 dark:text-slate-200 dark:hover:border-emerald-700 dark:hover:bg-slate-800 sm:rounded-full"
             disabled={isLoading}
             onClick={handleGoogleLogin}
             type="button"
@@ -246,7 +246,7 @@ export default function LoginPage() {
               </label>
               <input
                 autoComplete="email"
-                className="w-full rounded-2xl border border-slate-200 bg-white/70 px-4 py-4 text-sm text-slate-900 outline-none backdrop-blur-xl transition-all duration-300 placeholder:text-slate-400 hover:border-emerald-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 dark:border-slate-700 dark:bg-slate-950/50 dark:text-white dark:placeholder:text-slate-500 dark:focus:bg-slate-950"
+                className="w-full rounded-xl border border-slate-200 bg-white/80 px-4 py-3.5 text-sm text-slate-900 outline-none transition-all duration-200 placeholder:text-slate-400 hover:border-emerald-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 dark:border-slate-700 dark:bg-slate-950/60 dark:text-white dark:placeholder:text-slate-500 dark:focus:bg-slate-950"
                 id="email"
                 name="email"
                 placeholder="you@example.com"
@@ -263,7 +263,7 @@ export default function LoginPage() {
               <div className="relative">
                 <input
                   autoComplete="current-password"
-                  className="w-full rounded-2xl border border-slate-200 bg-white/70 px-4 py-4 pr-12 text-sm text-slate-900 outline-none backdrop-blur-xl transition-all duration-300 placeholder:text-slate-400 hover:border-emerald-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 dark:border-slate-700 dark:bg-slate-950/50 dark:text-white dark:placeholder:text-slate-500 dark:focus:bg-slate-950"
+                  className="w-full rounded-xl border border-slate-200 bg-white/80 px-4 py-3.5 pr-12 text-sm text-slate-900 outline-none transition-all duration-200 placeholder:text-slate-400 hover:border-emerald-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 dark:border-slate-700 dark:bg-slate-950/60 dark:text-white dark:placeholder:text-slate-500 dark:focus:bg-slate-950"
                   id="password"
                   name="password"
                   placeholder="Enter your password"
@@ -303,7 +303,7 @@ export default function LoginPage() {
             </label>
 
             <button
-              className="group relative w-full overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 px-4 py-4 text-sm font-bold text-white shadow-xl shadow-emerald-700/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-emerald-700/30 focus:outline-none focus:ring-4 focus:ring-emerald-300/40 disabled:cursor-not-allowed disabled:opacity-60"
+              className="group relative min-h-12 w-full overflow-hidden rounded-xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-emerald-700/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-700/25 focus:outline-none focus:ring-4 focus:ring-emerald-300/40 disabled:cursor-not-allowed disabled:opacity-60 sm:rounded-full"
               disabled={isLoading}
               type="submit"
             >

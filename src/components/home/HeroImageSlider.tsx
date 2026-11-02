@@ -6,6 +6,7 @@ import {
   useEffect,
   useRef,
   useState,
+  useCallback,
   type KeyboardEvent,
   type TouchEvent,
 } from "react";
@@ -38,15 +39,21 @@ const slides = [
 ];
 
 const SWIPE_THRESHOLD = 48;
+const AUTOPLAY_INTERVAL_MS = 2500;
+const SLIDE_TRANSITION_MS = 1100;
 
 export default function HeroImageSlider() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPausedByUser, setIsPausedByUser] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [userRequestedPlayback, setUserRequestedPlayback] = useState(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const transitionLock = useRef(false);
+  const transitionTimeout = useRef<number | null>(null);
   const activeSlide = slides[activeIndex];
+  const nextIndex = (activeIndex + 1) % slides.length;
   const isAutoplayEnabled =
     !isPausedByUser &&
     (!prefersReducedMotion || userRequestedPlayback);
@@ -63,22 +70,50 @@ export default function HeroImageSlider() {
       motionPreference.removeEventListener("change", updateMotionPreference);
   }, []);
 
+  useEffect(
+    () => () => {
+      if (transitionTimeout.current !== null) {
+        window.clearTimeout(transitionTimeout.current);
+      }
+    },
+    [],
+  );
+
+  const transitionTo = useCallback(
+    (index: number) => {
+      if (transitionLock.current || index === activeIndex) return;
+
+      transitionLock.current = true;
+      setIsTransitioning(true);
+      setActiveIndex(index);
+      transitionTimeout.current = window.setTimeout(
+        () => {
+          transitionLock.current = false;
+          transitionTimeout.current = null;
+          setIsTransitioning(false);
+        },
+        prefersReducedMotion ? 0 : SLIDE_TRANSITION_MS,
+      );
+    },
+    [activeIndex, prefersReducedMotion],
+  );
+
   useEffect(() => {
     if (!isPlaying) return;
 
     const timeout = window.setTimeout(() => {
-      setActiveIndex((index) => (index + 1) % slides.length);
-    }, 2500);
+      transitionTo(nextIndex);
+    }, AUTOPLAY_INTERVAL_MS);
 
     return () => window.clearTimeout(timeout);
-  }, [activeIndex, isPlaying]);
+  }, [activeIndex, isPlaying, nextIndex, transitionTo]);
 
   function showPrevious() {
-    setActiveIndex((index) => (index - 1 + slides.length) % slides.length);
+    transitionTo((activeIndex - 1 + slides.length) % slides.length);
   }
 
   function showNext() {
-    setActiveIndex((index) => (index + 1) % slides.length);
+    transitionTo(nextIndex);
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
@@ -132,13 +167,14 @@ export default function HeroImageSlider() {
     >
       {slides.map((slide, index) => {
         const isActive = index === activeIndex;
+        const isPreloadCandidate = isActive || index === nextIndex;
 
         return (
           <div
             aria-hidden={!isActive}
             aria-label={`${String(index + 1).padStart(2, "0")} of ${String(slides.length).padStart(2, "0")}`}
             aria-roledescription="slide"
-            className={`absolute inset-0 transition-opacity duration-800 ease-in-out motion-reduce:transition-none ${
+            className={`absolute inset-0 transition-opacity duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
               isActive ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
             key={slide.src}
@@ -146,13 +182,13 @@ export default function HeroImageSlider() {
           >
             <Image
               alt={slide.alt}
-              className={`object-cover transition-transform duration-800 ease-out motion-reduce:transition-none ${
-                isActive ? "scale-[1.035]" : "scale-100"
+              className={`object-cover object-center transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+                isActive ? "scale-[1.025]" : "scale-100"
               }`}
               fill
-              loading={index === 0 ? undefined : "lazy"}
-              preload={index === 0}
-              sizes="(max-width: 767px) 90vw, (max-width: 1023px) 42vw, 40vw"
+              loading={isPreloadCandidate ? undefined : "lazy"}
+              preload={isPreloadCandidate}
+              sizes="(max-width: 639px) 90vw, (max-width: 1023px) calc(100vw - 64px), (max-width: 1279px) 55vw, 50vw"
               src={slide.src}
             />
           </div>
@@ -161,46 +197,57 @@ export default function HeroImageSlider() {
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-slate-950/85 via-slate-950/10 to-slate-950/10"
+        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-slate-950/85 via-slate-950/15 to-transparent"
       />
 
-      <div className="absolute inset-x-0 bottom-0 z-10 p-4 text-white sm:p-5 md:p-4 lg:p-5">
-        <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-emerald-200 sm:text-xs">
-          {activeSlide.category}
-        </p>
-        <p className="mt-1.5 max-w-sm text-pretty text-sm font-semibold leading-5 sm:text-base sm:leading-6">
-          {activeSlide.caption}
-        </p>
+      <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col items-stretch gap-3 p-4 text-white sm:flex-row sm:items-end sm:justify-between sm:p-6 md:p-7">
+        <div className="min-w-0 pb-1">
+          <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-emerald-200 sm:text-xs">
+            {activeSlide.category}
+          </p>
+          <p className="mt-1.5 max-w-sm text-pretty text-sm font-semibold leading-5 sm:text-base sm:leading-6">
+            {activeSlide.caption}
+          </p>
+        </div>
 
-        <div className="mt-4 flex items-center justify-between gap-2 sm:mt-5">
+        <div className="flex shrink-0 items-center gap-2 self-end rounded-full border border-white/20 bg-slate-950/35 p-1.5 shadow-lg shadow-slate-950/15 backdrop-blur-md">
           <div
             aria-label="Choose a slide"
-            className="flex items-center gap-1.5"
+            className="flex items-center gap-1.5 px-1"
             role="group"
           >
             {slides.map((slide, index) => (
               <button
                 aria-current={index === activeIndex ? "true" : undefined}
                 aria-label={`Show slide ${index + 1}: ${slide.category}`}
-                className={`h-2.5 rounded-full transition-[width,background-color] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 ${
+                className={`h-2 rounded-full transition-[width,background-color] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 disabled:cursor-wait ${
                   index === activeIndex
-                    ? "w-6 bg-white"
-                    : "w-2.5 bg-white/55 hover:bg-white/85"
+                    ? "w-5 bg-white"
+                    : "w-2 bg-white/55 hover:bg-white/85"
                 }`}
+                disabled={isTransitioning}
                 key={slide.src}
-                onClick={() => setActiveIndex(index)}
+                onClick={() => transitionTo(index)}
                 type="button"
               />
             ))}
           </div>
 
-          <div className="flex shrink-0 items-center gap-1.5">
+          <span
+            aria-label={`Slide ${String(activeIndex + 1).padStart(2, "0")} of ${String(slides.length).padStart(2, "0")}`}
+            className="min-w-[2.4rem] border-l border-white/20 px-2 text-center text-[0.68rem] font-semibold tabular-nums text-white/90"
+          >
+            {String(activeIndex + 1).padStart(2, "0")}/
+            {String(slides.length).padStart(2, "0")}
+          </span>
+
+          <div className="flex shrink-0 items-center gap-1">
             <span
-              aria-label={`Slide ${String(activeIndex + 1).padStart(2, "0")} of ${String(slides.length).padStart(2, "0")}`}
-              className="mr-1 min-w-[2.6rem] text-center text-xs font-semibold tabular-nums text-white/90"
+              className="sr-only"
+              aria-live="polite"
+              aria-atomic="true"
             >
-              {String(activeIndex + 1).padStart(2, "0")}/
-              {String(slides.length).padStart(2, "0")}
+              {activeSlide.category}: {activeSlide.caption}
             </span>
             <button
               aria-label={
@@ -209,7 +256,7 @@ export default function HeroImageSlider() {
                   : "Resume slide autoplay"
               }
               aria-pressed={!isAutoplayEnabled}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-slate-950/25 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               onClick={() => {
                 if (isAutoplayEnabled) {
                   setIsPausedByUser(true);
@@ -229,7 +276,8 @@ export default function HeroImageSlider() {
             </button>
             <button
               aria-label="Previous slide"
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-slate-950/25 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:cursor-wait disabled:opacity-50"
+              disabled={isTransitioning}
               onClick={showPrevious}
               type="button"
             >
@@ -237,7 +285,8 @@ export default function HeroImageSlider() {
             </button>
             <button
               aria-label="Next slide"
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-slate-950/25 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:cursor-wait disabled:opacity-50"
+              disabled={isTransitioning}
               onClick={showNext}
               type="button"
             >

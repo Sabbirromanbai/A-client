@@ -17,7 +17,7 @@ export default async function UpcomingEventsPage() {
     console.error("Failed to load upcoming events.", error);
     return (
       <main className="flex-1 bg-[#fbfdf9] dark:bg-slate-950">
-        <section className="mx-auto w-full max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:px-10">
+        <section className="mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10">
           <EventLoadError />
         </section>
       </main>
