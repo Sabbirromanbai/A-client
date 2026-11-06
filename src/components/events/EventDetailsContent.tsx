@@ -20,7 +20,6 @@ import { ApiClientError, apiClient } from "@/app/lib/api-client";
 import {
   getEventVolunteers,
   type CommunityEvent,
-  type EventVolunteer,
   type EventVolunteerList,
 } from "@/app/lib/events";
 import { authClient } from "@/lib/auth-client";
@@ -47,7 +46,7 @@ type ParticipationActionResponse = {
   success: true;
   message?: string;
   count: number;
-  volunteers: EventVolunteer[];
+  volunteers: Array<{ name: string; image?: string | null }>;
 };
 
 type VolunteerState =
@@ -112,7 +111,9 @@ function isParticipationActionResponse(
       volunteer !== null &&
       "name" in volunteer &&
       typeof volunteer.name === "string" &&
-      (!("image" in volunteer) || typeof volunteer.image === "string"),
+      (!("image" in volunteer) ||
+        typeof volunteer.image === "string" ||
+        volunteer.image === null),
   );
 }
 
@@ -270,7 +271,13 @@ export default function EventDetailsContent({
       if (isParticipationActionResponse(response)) {
         setVolunteerState({
           status: "ready",
-          data: { count: response.count, volunteers: response.volunteers },
+          data: {
+            count: response.count,
+            volunteers: response.volunteers.map(({ name, image }) => ({
+              name,
+              image: image ?? undefined,
+            })),
+          },
         });
       } else {
         console.error("The participation service returned an invalid roster.");

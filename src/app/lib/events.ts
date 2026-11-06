@@ -158,7 +158,9 @@ export async function getEventVolunteers(
     if (
       !isRecord(value) ||
       typeof value.name !== "string" ||
-      (value.image !== undefined && typeof value.image !== "string")
+      (value.image !== undefined &&
+        value.image !== null &&
+        typeof value.image !== "string")
     ) {
       return null;
     }
